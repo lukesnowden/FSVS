@@ -336,6 +336,24 @@
 			},
 
 			/**
+			 * [addClasses description]
+			 * @param {[type]} before [description]
+			 * @param {[type]} after  [description]
+			 */
+
+			addClasses : function( before, after ) {
+				var removeClass = 'active-slide-' + (before+1);
+				var addClass = 'active-slide-' + (after+1);
+
+				body.removeClass( removeClass );
+				body.addClass( addClass );
+				if( options.nthClasses ) {
+					body.removeClass( 'active-nth-slide-' + (( before % options.nthClasses )+1) );
+					body.addClass( 'active-nth-slide-' + (( after % options.nthClasses )+1) );
+				}
+			},
+
+			/**
 			 * [slideToIndex description]
 			 * @param  {[type]} index [description]
 			 * @return {[type]}       [description]
@@ -344,6 +362,7 @@
 			slideToIndex : function( index, e ) {
 				var e = e || false;
 				scrolling = true;
+				app.addClasses( currentSlideIndex, index );
 				options.beforeSlide( index );
 				if( ! e && pagination ) {
 					$( 'li', pagination ).eq( index ).trigger( 'click' );
