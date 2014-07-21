@@ -1,0 +1,69 @@
+
+html.fsvs {
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	body {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		height: 100%;
+		width: 100%;
+		> * {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+		}
+	}
+	#fsvs-pagination {
+		margin: 0;
+		padding:8px 4px;
+		position: fixed;
+		height: auto;
+		right: -100px;
+		top: 50%;
+		z-index: 999;
+		width: 32px;
+		li {
+			list-style: none;
+			width: 25px;
+			height: 25px;
+			line-height: 25px;
+			text-align: center;
+			margin: 0 0 2px 0;
+			cursor: pointer;
+			> span {
+				@include border-radius( 100% );
+				width: 22px;
+				height: 22px;
+				line-height: 22px;
+				border: 1px solid white;
+				display: block;
+				> span {
+					@include border-radius( 100% );
+					width: 12px;
+					height: 12px;
+					line-height: 12px;
+					border: 1px solid white;
+					display: block;
+					margin: 4px;
+				}
+			}
+			&.active {
+				> span {
+					border: 1px dashed white;
+					> span {
+						background: white;
+					}
+				}
+			}
+			&:last-child {
+				margin: 0;
+			}
+		}
+	}
+}

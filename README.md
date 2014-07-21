@@ -2,7 +2,7 @@
 
 more information http://luke.sno.wden.co.uk/full-screen-vertical-scroll
 
-initiate the plugin:
+###initiate the plugin:
 
 ```javascript
 $(document).ready( function() {
@@ -25,4 +25,19 @@ $(document).ready( function() {
 	//slider.slideDown();
 	//slider.slideToIndex( index );
 });
+```
+
+###Basic HTML structure
+
+Slides must be directly a child of the body tag and the html tag must have a class of "fsvs"
+
+```html
+<!doctype html>
+<html class="fsvs" lang="en">
+	<body>
+		<div class="slide"></div>
+		<div class="slide"></div>
+		<div class="slide"></div>
+	</body>
+</html>
 ```
