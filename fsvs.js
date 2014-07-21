@@ -17,7 +17,9 @@
 			endSlide : function(){},
 			mouseWheelEvents : true,
 			mouseDragEvents : true,
-			arrowKeyEvents : true
+			arrowKeyEvents : true,
+			pagination : true,
+			nthClasses : false
 		};
 
 		for( var i in options ) {
@@ -52,6 +54,13 @@
 		 */
 
 		var mouseWheelTimer = false;
+
+		/**
+		 * [pagination description]
+		 * @type {Boolean}
+		 */
+
+		var pagination = false;
 
 		/**
 		 * [hasTransition description]
@@ -157,27 +166,19 @@
 		};
 
 		/**
-		 * [addPagination description]
+		 * [nthClasses description]
+		 * @param  {[type]} nthClassLimit [description]
+		 * @return {[type]}               [description]
 		 */
 
-		var addPagination = function() {
-			var pagination = $('<ul id="fsvs-pagination"></ul>');
-			$( options.selector, body ).each( function(i) {
-				$('<li>' + (i+1) + '</li>').appendTo( pagination );
+		var nthClasses = function( nthClassLimit ) {
+			$( options.selector, body ).each( function( i ) {
+				var nthClass = 'nth-class-' + ((i%nthClassLimit)+1);
+				if( ! $(this).hasClass( nthClass ) ) {
+					$(this).addClass( nthClass );
+				}
 			});
-			if( $('#fsvs-pagination').length !== 0 ) {
-				$('#fsvs-pagination').remove();
-			}
-			pagination.appendTo( body );
-			var paginationHeight = pagination.height();
-			pagination.css({
-				marginTop : '-' + (paginationHeight/2) + 'px',
-				right : '25px'
-			});
-			$('li', pagination).click( function(){
-				app.slideToIndex( $(this).index() );
-			});
-		}
+		};
 
 		/**
 		 * [app description]
@@ -185,6 +186,41 @@
 		 */
 
 		var app = {
+
+			nthClasses : nthClasses,
+
+			/**
+			 * [addPagination description]
+			 */
+
+			addPagination : function() {
+				pagination = $('<ul id="fsvs-pagination"></ul>');
+				$( options.selector, body ).each( function(i) {
+					var linkClass = currentSlideIndex === i ? 'pagination-link active' : 'pagination-link';
+					$('<li class="' + linkClass + '"><span><span></span></span></li>').appendTo( pagination );
+				});
+				if( $('#fsvs-pagination').length !== 0 ) {
+					$('#fsvs-pagination').remove();
+				}
+				pagination.appendTo( body );
+				var paginationHeight = pagination.height();
+				var speed = options.speed/1000;
+				$('span', pagination).css({
+					'-webkit-transition': 'all ' + speed + 's',
+					'-moz-transition'	: 'all ' + speed + 's',
+					'-o-transition'		: 'all ' + speed + 's',
+					'transition'		: 'all ' + speed + 's'
+				});
+				pagination.css({
+					marginTop : '-' + (paginationHeight/2) + 'px',
+					right : '25px'
+				});
+				$('li', pagination).click( function(e){
+					$('.active', pagination).removeClass( 'active' );
+					$(this).addClass( 'active' );
+					app.slideToIndex( $(this).index(), e );
+				});
+			},
 
 			/**
 			 * [setSpeed description]
@@ -236,9 +272,13 @@
 			 * @return {[type]}       [description]
 			 */
 
-			slideToIndex : function( index ) {
+			slideToIndex : function( index, e ) {
+				var e = e || false;
 				scrolling = true;
 				options.beforeSlide( index );
+				if( ! e && pagination ) {
+					$( 'li', pagination ).eq( index ).trigger( 'click' );
+				}
 				if( hasTransition() ) {
 					body.css({ top : "-" + (index*100) + '%' });
 					setTimeout( function(){
@@ -258,9 +298,9 @@
 			 * @return {[type]} [description]
 			 */
 
-			slideDown : function() {
+			slideDown : function(e) {
 				if( app.canSlideDown() ) {
-					app.slideToIndex( (currentSlideIndex+1) );
+					app.slideToIndex( (currentSlideIndex+1), e );
 				}
 			},
 
@@ -269,9 +309,9 @@
 			 * @return {[type]} [description]
 			 */
 
-			slideUp : function() {
+			slideUp : function(e) {
 				if( app.canSlideUp() ) {
-					app.slideToIndex( (currentSlideIndex-1) );
+					app.slideToIndex( (currentSlideIndex-1), e );
 				}
 			},
 
@@ -283,7 +323,12 @@
 			init : function() {
 				body = $('body');
 				app.setSpeed( options.speed );
-				addPagination();
+				if( options.pagination ) {
+					app.addPagination();
+				}
+				if( options.nthClasses ) {
+					nthClasses( options.nthClasses );
+				}
 				if( options.mouseWheelEvents ) {
 					bindMouseWheelEvent();
 				}
@@ -306,7 +351,15 @@
 
 	$(document).ready( function() {
 		var slider = $.fn.fsvs({
-			speed : 500
+			speed : 1000,
+			pagination : true,
+			nthClasses : 3,
+			endSlide : function(index) {
+				$('<div class="slide"><h2>Slide ' + (index+2) + '</h2></div>').appendTo( $('body') );
+				slider.nthClasses(3);
+				slider.addPagination();
+				console.log('now');
+			}
 		});
 	});
 
