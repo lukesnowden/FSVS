@@ -1,4 +1,12 @@
 
+/*!
+* 	FSVS - Full Screen Vertical Scroller
+* 	https://github.com/lukesnowden/FSVS
+* 	Copyright 2014 Luke Snowden
+* 	Released under the MIT license:
+* 	http://www.opensource.org/licenses/mit-license.php
+*/
+
 ;( function($){
 
 	$.fn.fsvs = function( options ) {
@@ -17,9 +25,11 @@
 			endSlide : function(){},
 			mouseWheelEvents : true,
 			mouseDragEvents : true,
+			touchEvents : true,
 			arrowKeyEvents : true,
 			pagination : true,
-			nthClasses : false
+			nthClasses : false,
+			detectHash : true
 		};
 
 		for( var i in options ) {
@@ -63,6 +73,24 @@
 		var pagination = false;
 
 		/**
+		 * [detectHash description]
+		 * @return {[type]} [description]
+		 */
+
+		var detectHash = function(){
+			$( options.selector, body ).each( function( i ) {
+				var slide = $(this);
+				if( ! slide.attr( 'id' ) ) {
+					slide.attr( 'id', 'slide-' + (i+1) );
+				}
+			});
+			if( window.location.hash !== '' ) {
+				var slideID = window.location.hash;
+				app.slideToIndex( $( '> ' + slideID, body ).index() );
+			}
+		};
+
+		/**
 		 * [hasTransition description]
 		 * @return {Boolean} [description]
 		 */
@@ -78,11 +106,11 @@
 		}
 
 		/**
-		 * [bindDeviceSwipes description]
+		 * [bindMouseDrag description]
 		 * @return {[type]} [description]
 		 */
 
-		var bindDeviceSwipes = function() {
+		var bindMouseDrag = function() {
 			var x, y;
 			window.onmousedown = function(e) {
 				e.preventDefault();
@@ -90,11 +118,48 @@
 			}
 			window.onmouseup = function(e) {
 				if( e.y > ( y+options.mouseSwipeDisance ) ) {
-					app.slideDown();
-				} else if( e.y < ( y-options.mouseSwipeDisance ) ) {
 					app.slideUp();
+				} else if( e.y < ( y-options.mouseSwipeDisance ) ) {
+					app.slideDown();
 				}
 			}
+		};
+
+		/**
+		 * [bindTouchSwipe description]
+		 * @return {[type]} [description]
+		 */
+
+		var bindTouchSwipe = function() {
+			var startY = null;
+			$(window).on( "touchstart", function(ev) {
+    			var e = ev.originalEvent;
+				if( e.target.nodeName.toLowerCase() !== 'a' ) {
+					var touches = e.touches;
+					if( touches && touches.length ) {
+						startY = touches[0].pageY;
+					}
+					e.preventDefault();
+				}
+			});
+			$(window).on( "touchmove", function(ev) {
+    			var e = ev.originalEvent;
+				if( startY !== null ) {
+					var touches = e.touches;
+					if( touches && touches.length ) {
+						var deltaY = startY - touches[0].pageY;
+						if ( deltaY >= options.mouseSwipeDisance ) {
+							app.slideDown();
+							startY = null;
+						}
+						if ( deltaY <= ( options.mouseSwipeDisance * -1 ) ) {
+							app.slideUp();
+							startY = null;
+						}
+					}
+					e.preventDefault();
+				}
+			});
 		};
 
 		/**
@@ -157,6 +222,10 @@
 		var slideCallback = function( index ) {
 			currentSlideIndex = index;
 			options.afterSlide( index );
+			if( options.detectHash ) {
+				var slide = $( options.selector, body ).eq( index );
+				window.location.hash = slide[0].id;
+			}
 			if( ! app.canSlideDown() ) {
 				options.endSlide( index );
 			}
@@ -336,7 +405,13 @@
 					bindKeyArrows();
 				}
 				if( options.mouseDragEvents ) {
-					bindDeviceSwipes();
+					bindMouseDrag();
+				}
+				if( options.touchEvents ) {
+					bindTouchSwipe();
+				}
+				if( options.detectHash ) {
+					detectHash();
 				}
 			}
 
@@ -348,19 +423,5 @@
 		return app;
 
 	};
-
-	$(document).ready( function() {
-		var slider = $.fn.fsvs({
-			speed : 1000,
-			pagination : true,
-			nthClasses : 3,
-			endSlide : function(index) {
-				$('<div class="slide"><h2>Slide ' + (index+2) + '</h2></div>').appendTo( $('body') );
-				slider.nthClasses(3);
-				slider.addPagination();
-				console.log('now');
-			}
-		});
-	});
 
 })( jQuery );
