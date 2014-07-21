@@ -73,6 +73,21 @@
 		var pagination = false;
 
 		/**
+		 * [isChrome description]
+		 * @reference http://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome
+		 * @return {Boolean} [description]
+		 */
+
+		var isChrome = function() {
+			var isChromium = window.chrome,
+			    vendorName = window.navigator.vendor;
+			if( isChromium !== null && vendorName === "Google Inc." ) {
+			   return true;
+			}
+			return false;
+		};
+
+		/**
 		 * [detectHash description]
 		 * @return {[type]} [description]
 		 */
@@ -172,7 +187,11 @@
 			var e = window.event || e;
 			var wheely = ( e.wheelDelta || -e.detail );
 			var delta = Math.max( -1, Math.min( 1, wheely ) );
-			if( ! scrolling && Math.abs( wheely ) > 70 ) {
+			if( isChrome() ) {
+				// chrome seems to extends its "wheely" motion
+				wheely = wheely / 2;
+			}
+			if( ! scrolling && Math.abs( wheely ) > 5 ) {
 				if( delta > 0 ) {
 					app.slideUp();
 				} else {
