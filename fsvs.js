@@ -47,6 +47,20 @@
 		var currentSlideIndex = 0;
 
 		/**
+		 * [ignoreHashChange description]
+		 * @type {Boolean}
+		 */
+
+		var ignoreHashChange = false;
+
+		/**
+		 * [bodyTimeout description]
+		 * @type {[type]}
+		 */
+
+		var bodyTimeout = null;
+
+		/**
 		 * [body description]
 		 * @type {[type]}
 		 */
@@ -95,13 +109,14 @@
 		 */
 
 		var changeViaHash = function() {
-			if( window.location.hash !== '' ) {
-				var slideID = window.location.hash;
-				var slideTo = $( '> ' + slideID, body );
-				if( ! slideTo.hasClass( 'active-slide' ) ) {
+			if( ! ignoreHashChange ) {
+				if( window.location.hash !== '' ) {
+					var slideID = window.location.hash;
+					var slideTo = $( '> ' + slideID, body );
 					app.slideToIndex( slideTo.index() );
 				}
 			}
+			ignoreHashChange = false;
 		};
 
 		/**
@@ -201,11 +216,13 @@
 			var e = window.event || e;
 			var wheely = ( e.wheelDelta || -e.detail );
 			var delta = Math.max( -1, Math.min( 1, wheely ) );
+			e.preventDefault();
 			if( isChrome() ) {
 				// chrome seems to extends its "wheely" motion
-				wheely = wheely / 2;
+				wheely = wheely / 5;
 			}
 			if( ! scrolling && Math.abs( wheely ) > 5 ) {
+				scrolling = true;
 				if( delta > 0 ) {
 					app.slideUp();
 				} else {
@@ -220,13 +237,7 @@
 		 */
 
 		var bindMouseWheelEvent = function() {
-			var doc = window;
-			if ( doc.addEventListener) {
-				doc.addEventListener( "mousewheel", mouseWheelHandler, false );
-				doc.addEventListener( "DOMMouseScroll", mouseWheelHandler, false );
-			} else {
-				doc.attachEvent( "onmousewheel", mouseWheelHandler );
-			}
+			$(document).bind('mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
 		};
 
 		/**
@@ -262,9 +273,7 @@
 			if( ! app.canSlideDown() ) {
 				options.endSlide( index );
 			}
-			if( ! mouseWheelTimer ) {
-				scrolling = false;
-			}
+			scrolling = false;
 		};
 
 		/**
@@ -281,6 +290,42 @@
 				}
 			});
 		};
+
+		/**
+		 * [jQuerySlide description]
+		 * @param  {[type]} index [description]
+		 * @return {[type]}       [description]
+		 */
+
+		var jQuerySlide = function( index ) {
+			if( body.is( ':animated' ) ) {
+				currentSlideIndex = index;
+				body.stop( true, false );
+			}
+			body.animate({
+				top : '-' + (index*$(window).height()) + 'px'
+			}, options.speed, function() {
+				slideCallback( index );
+			});
+		};
+
+		/**
+		 * [cssSlide description]
+		 * @param  {[type]} index [description]
+		 * @return {[type]}       [description]
+		 */
+
+		var cssSlide = function( index ) {
+			body.css({ top : "-" + (index*100) + '%' });
+			if( bodyTimeout !== null ) {
+				currentSlideIndex = index;
+				clearTimeout( bodyTimeout );
+			}
+			bodyTimeout = setTimeout( function(){
+				slideCallback( index );
+				bodyTimeout = null;
+			}, options.speed );
+		}
 
 		/**
 		 * [app description]
@@ -375,7 +420,7 @@
 			 */
 
 			addClasses : function( before, after ) {
-
+				console.log('before: ' + before + ' after: ' + after);
 				body.removeClass( removeClass = 'active-slide-' + (before+1) );
 				body.addClass( 'active-slide-' + (after+1) );
 
@@ -396,23 +441,14 @@
 
 			slideToIndex : function( index, e ) {
 				var e = e || false;
-				scrolling = true;
-				app.addClasses( currentSlideIndex, index );
-				options.beforeSlide( index );
 				if( ! e && pagination ) {
 					$( 'li', pagination ).eq( index ).trigger( 'click' );
 				}
+				app.addClasses( currentSlideIndex, index );
 				if( hasTransition() ) {
-					body.css({ top : "-" + (index*100) + '%' });
-					setTimeout( function(){
-						slideCallback( index );
-					}, options.speed );
+					cssSlide( index );
 				} else {
-					body.animate({
-						top : '-' + (index*$(window).height()) + 'px'
-					}, options.speed, function() {
-						slideCallback( index );
-					});
+					jQuerySlide( index );
 				}
 			},
 
@@ -423,6 +459,7 @@
 
 			slideDown : function(e) {
 				if( app.canSlideDown() ) {
+					ignoreHashChange = false;
 					app.slideToIndex( (currentSlideIndex+1), e );
 				}
 			},
@@ -434,6 +471,7 @@
 
 			slideUp : function(e) {
 				if( app.canSlideUp() ) {
+					ignoreHashChange = false;
 					app.slideToIndex( (currentSlideIndex-1), e );
 				}
 			},
