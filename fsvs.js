@@ -212,21 +212,29 @@
 		 * @return {[type]}   [description]
 		 */
 
-		var mouseWheelHandler = function( e ) {
-			var e = window.event || e;
-			var wheely = ( e.wheelDelta || -e.detail );
+		var mouseWheelHandler = function( ev ) {
+			var e = window.event || ev;
+			var wheely = ( e.wheelDelta || -e.detail || e.originalEvent.detail );
 			var delta = Math.max( -1, Math.min( 1, wheely ) );
-			e.preventDefault();
 			if( isChrome() ) {
 				// chrome seems to extends its "wheely" motion
-				wheely = wheely / 5;
+				wheely = Math.floor( wheely / 5 );
 			}
 			if( ! scrolling && Math.abs( wheely ) > 5 ) {
 				scrolling = true;
-				if( delta > 0 ) {
-					app.slideUp();
+				// Firefox goes backwards... obviously
+				if( e.originalEvent && e.originalEvent.detail ) {
+					if( delta > 0 ) {
+						app.slideDown();
+					} else {
+						app.slideUp();
+					}
 				} else {
-					app.slideDown();
+					if( delta > 0 ) {
+						app.slideUp();
+					} else {
+						app.slideDown();
+					}
 				}
 			}
 		};
@@ -237,7 +245,7 @@
 		 */
 
 		var bindMouseWheelEvent = function() {
-			$(document).bind('mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
+			$(window).bind('wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
 		};
 
 		/**
