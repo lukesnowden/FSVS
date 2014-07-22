@@ -20,6 +20,7 @@
 
 		var defaults = {
 			speed : 5000,
+			bodyID : 'fsvs-body',
 			selector : '> .slide',
 			mouseSwipeDisance : 40,
 			afterSlide : function(){},
@@ -324,7 +325,12 @@
 		 */
 
 		var cssSlide = function( index ) {
-			body.css({ top : "-" + (index*100) + '%' });
+			body.css({
+				'-webkit-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
+				'-moz-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
+				'-ms-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
+				'transform' : 'translate3d(0, -' + (index*100) + '%, 0)'
+			});
 			if( bodyTimeout !== null ) {
 				currentSlideIndex = index;
 				clearTimeout( bodyTimeout );
@@ -357,7 +363,7 @@
 				if( $('#fsvs-pagination').length !== 0 ) {
 					$('#fsvs-pagination').remove();
 				}
-				pagination.appendTo( body );
+				pagination.appendTo( $('body') );
 				var paginationHeight = pagination.height();
 				var speed = options.speed/1000;
 				$('span', pagination).css({
@@ -429,15 +435,16 @@
 			 */
 
 			addClasses : function( before, after ) {
-				body.removeClass( removeClass = 'active-slide-' + (before+1) );
-				body.addClass( 'active-slide-' + (after+1) );
+				var _body = $('body');
+				_body.removeClass( removeClass = 'active-slide-' + (before+1) );
+				_body.addClass( 'active-slide-' + (after+1) );
 
 				$( options.selector, body ).eq( before ).removeClass( 'active-slide' );
 				$( options.selector, body ).eq( after ).addClass( 'active-slide' );
 
 				if( options.nthClasses ) {
-					body.removeClass( 'active-nth-slide-' + (( before % options.nthClasses )+1) );
-					body.addClass( 'active-nth-slide-' + (( after % options.nthClasses )+1) );
+					_body.removeClass( 'active-nth-slide-' + (( before % options.nthClasses )+1) );
+					_body.addClass( 'active-nth-slide-' + (( after % options.nthClasses )+1) );
 				}
 			},
 
@@ -495,7 +502,7 @@
 			 */
 
 			init : function() {
-				body = $('body');
+				body = $( '#' + options.bodyID );
 				if( hasTransition() ) {
 					app.setSpeed( options.speed );
 				}

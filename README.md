@@ -8,6 +8,7 @@ more information http://luke.sno.wden.co.uk/full-screen-vertical-scroll
 $(document).ready( function() {
 	var slider = $.fn.fsvs({
 		speed : 5000,
+		bodyID : 'fsvs-body',
 		selector : '> .slide',
 		mouseSwipeDisance : 40,
 		afterSlide : function(){},
@@ -29,15 +30,17 @@ $(document).ready( function() {
 
 ###Basic HTML structure
 
-Slides must be directly a child of the body tag and the html tag must have a class of "fsvs"
+
 
 ```html
 <!doctype html>
 <html class="fsvs" lang="en">
 	<body>
-		<div class="slide"></div>
-		<div class="slide"></div>
-		<div class="slide"></div>
+		<div id="fsvs-body">
+			<div class="slide"></div>
+			<div class="slide"></div>
+			<div class="slide"></div>
+		</div>
 	</body>
 </html>
 ```
