@@ -300,7 +300,7 @@
 		var jQuerySlide = function( index ) {
 			if( body.is( ':animated' ) ) {
 				currentSlideIndex = index;
-				body.stop( true, false );
+				body.stop();
 			}
 			body.animate({
 				top : '-' + (index*$(window).height()) + 'px'
@@ -488,7 +488,9 @@
 
 			init : function() {
 				body = $('body');
-				app.setSpeed( options.speed );
+				if( hasTransition() ) {
+					app.setSpeed( options.speed );
+				}
 				if( options.pagination ) {
 					app.addPagination();
 				}
