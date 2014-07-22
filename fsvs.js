@@ -11,6 +11,8 @@
 
 	$.fn.fsvs = function( options ) {
 
+		options = options || {};
+
 		/**
 		 * [defaults description]
 		 * @type {Object}
