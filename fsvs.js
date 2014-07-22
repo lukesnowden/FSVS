@@ -88,6 +88,21 @@
 		};
 
 		/**
+		 * [changeViaHash description]
+		 * @return {[type]} [description]
+		 */
+
+		var changeViaHash = function() {
+			if( window.location.hash !== '' ) {
+				var slideID = window.location.hash;
+				var slideTo = $( '> ' + slideID, body );
+				if( ! slideTo.hasClass( 'active-slide' ) ) {
+					app.slideToIndex( slideTo.index() );
+				}
+			}
+		};
+
+		/**
 		 * [detectHash description]
 		 * @return {[type]} [description]
 		 */
@@ -99,10 +114,7 @@
 					slide.attr( 'id', 'slide-' + (i+1) );
 				}
 			});
-			if( window.location.hash !== '' ) {
-				var slideID = window.location.hash;
-				app.slideToIndex( $( '> ' + slideID, body ).index() );
-			}
+			changeViaHash();
 		};
 
 		/**
@@ -361,11 +373,13 @@
 			 */
 
 			addClasses : function( before, after ) {
-				var removeClass = 'active-slide-' + (before+1);
-				var addClass = 'active-slide-' + (after+1);
 
-				body.removeClass( removeClass );
-				body.addClass( addClass );
+				body.removeClass( removeClass = 'active-slide-' + (before+1) );
+				body.addClass( 'active-slide-' + (after+1) );
+
+				$( options.selector, body ).eq( before ).removeClass( 'active-slide' );
+				$( options.selector, body ).eq( after ).addClass( 'active-slide' );
+
 				if( options.nthClasses ) {
 					body.removeClass( 'active-nth-slide-' + (( before % options.nthClasses )+1) );
 					body.addClass( 'active-nth-slide-' + (( after % options.nthClasses )+1) );
@@ -450,6 +464,12 @@
 				}
 				if( options.detectHash ) {
 					detectHash();
+					if( window.addEventListener ) {
+					    window.addEventListener( "hashchange", changeViaHash, false );
+					}
+					else if (window.attachEvent) {
+					    window.attachEvent( "onhashchange", changeViaHash );
+					}
 				}
 			}
 
