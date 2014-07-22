@@ -363,6 +363,7 @@
 					right : '25px'
 				});
 				$('li', pagination).click( function(e){
+					ignoreHashChange = true;
 					$('.active', pagination).removeClass( 'active' );
 					$(this).addClass( 'active' );
 					app.slideToIndex( $(this).index(), e );
@@ -420,7 +421,6 @@
 			 */
 
 			addClasses : function( before, after ) {
-				console.log('before: ' + before + ' after: ' + after);
 				body.removeClass( removeClass = 'active-slide-' + (before+1) );
 				body.addClass( 'active-slide-' + (after+1) );
 
@@ -442,7 +442,8 @@
 			slideToIndex : function( index, e ) {
 				var e = e || false;
 				if( ! e && pagination ) {
-					$( 'li', pagination ).eq( index ).trigger( 'click' );
+					$('.active', pagination).removeClass( 'active' );
+					$('> *', pagination).eq(index).addClass( 'active' );
 				}
 				app.addClasses( currentSlideIndex, index );
 				if( hasTransition() ) {
@@ -459,8 +460,10 @@
 
 			slideDown : function(e) {
 				if( app.canSlideDown() ) {
-					ignoreHashChange = false;
+					ignoreHashChange = true;
 					app.slideToIndex( (currentSlideIndex+1), e );
+				} else {
+					scrolling = false;
 				}
 			},
 
@@ -471,8 +474,10 @@
 
 			slideUp : function(e) {
 				if( app.canSlideUp() ) {
-					ignoreHashChange = false;
+					ignoreHashChange = true;
 					app.slideToIndex( (currentSlideIndex-1), e );
+				} else {
+					scrolling = false;
 				}
 			},
 
