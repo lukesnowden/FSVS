@@ -533,6 +533,7 @@
 					    window.attachEvent( "onhashchange", changeViaHash );
 					}
 				}
+				app.addClasses( 0, 0 );
 			}
 
 		};
