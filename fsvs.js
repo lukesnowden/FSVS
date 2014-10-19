@@ -307,6 +307,7 @@
 		 */
 
 		var jQuerySlide = function( index ) {
+			options.beforeSlide( index );
 			if( body.is( ':animated' ) ) {
 				currentSlideIndex = index;
 				body.stop();
@@ -325,6 +326,7 @@
 		 */
 
 		var cssSlide = function( index ) {
+			options.beforeSlide( index );
 			body.css({
 				'-webkit-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
 				'-moz-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
