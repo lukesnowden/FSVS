@@ -1,0 +1,18 @@
+{
+  "name": "FSVS",
+  "main": "fsvs.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/lukesnowden/FSVS",
+  "authors": [
+    "Luke Snowden <luke@sno.wden.co.uk>"
+  ],
+  "description": "Full Screen Vertical Scroll",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
