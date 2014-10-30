@@ -9,10 +9,10 @@
 * 	http://www.opensource.org/licenses/mit-license.php
 */
 
-;( function($){
+;( function( $, $w, $d ){
 
 	/**
-	 * [fsvs description]
+	 * [fsvs extend the jQuery core to allow a public call to our plugin]
 	 * @param  {[type]} options [description]
 	 * @return {[type]}         [description]
 	 */
@@ -20,7 +20,7 @@
 	$.fn.fsvs = function( _options ) {
 
 		/**
-		 * [options description]
+		 * [options override our default settings with the developer settings]
 		 * @type {[type]}
 		 */
 
@@ -29,7 +29,14 @@
 		}, _options );
 
 		/**
-		 * [isHijacked description]
+		 * [jqElm the FSVS jQuery object]
+		 * @type {[type]}
+		 */
+
+		var jqElm = null;
+
+		/**
+		 * [isHijacked check if we are currently being hijacked]
 		 * @return {Boolean} [description]
 		 */
 
@@ -38,7 +45,7 @@
 		};
 
 		/**
-		 * [canSlideUp description]
+		 * [canSlideUp from our position, can we slide up?]
 		 * @return {[type]} [description]
 		 */
 
@@ -47,7 +54,7 @@
 		};
 
 		/**
-		 * [canSlideDown description]
+		 * [canSlideDown from our position, can we slide down?]
 		 * @return {[type]} [description]
 		 */
 
@@ -56,7 +63,7 @@
 		};
 
 		/**
-		 * [slideUp description]
+		 * [slideUp slide up mother trucker!]
 		 * @return {[type]} [description]
 		 */
 
@@ -65,7 +72,7 @@
 		};
 
 		/**
-		 * [slideDown description]
+		 * [slideDown your going down!]
 		 * @return {[type]} [description]
 		 */
 
@@ -74,7 +81,7 @@
 		};
 
 		/**
-		 * [slideToIndex description]
+		 * [slideToIndex go to slide, minus the 1]
 		 * @return {[type]} [description]
 		 */
 
@@ -83,7 +90,7 @@
 		};
 
 		/**
-		 * [afterSlide description]
+		 * [afterSlide ok, I've slid... what next]
 		 * @return {[type]} [description]
 		 */
 
@@ -92,7 +99,7 @@
 		};
 
 		/**
-		 * [isFirstSlide description]
+		 * [isFirstSlide Cant he go instead? I don't want to go first!]
 		 * @return {Boolean} [description]
 		 */
 
@@ -101,7 +108,7 @@
 		};
 
 		/**
-		 * [isLastSlide description]
+		 * [isLastSlide last but not least... or is it?]
 		 * @return {Boolean} [description]
 		 */
 
@@ -110,14 +117,14 @@
 		};
 
 		/**
-		 * [app description]
+		 * [app play with me!]
 		 * @type {Object}
 		 */
 
 		var app = {
 
 			/**
-			 * [slideUp description]
+			 * [slideUp how am I sliding up? as is?]
 			 * @return {[type]} [description]
 			 */
 
@@ -126,7 +133,7 @@
 			},
 
 			/**
-			 * [slideDown description]
+			 * [slideDown how am I sliding down? as is?]
 			 * @return {[type]} [description]
 			 */
 
@@ -163,7 +170,7 @@
 
 		var init = function( elm, index ) {
 
-			var jqElm = $( elm );
+			jqElm = $( elm );
 
 			jqElm.data( 'fsvs', app );
 
@@ -181,4 +188,4 @@
 
 	};
 
-})( jQuery );
+})( jQuery, window, document );
