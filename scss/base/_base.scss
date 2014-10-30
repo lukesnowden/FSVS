@@ -1,0 +1,289 @@
+//
+//	Generic base styling for common elements
+// ------------------------------------------------ \
+
+//	Border box sizing
+// ------------------------------------------------ \
+
+* { 
+    &,
+    &:before,
+    &:after {
+        -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+    }
+}
+
+
+//	Page
+// ------------------------------------------------ \
+
+html {
+		font-family: $sans-serif;
+    font-size: ($base-font-size / 16px) * 1em;
+    line-height: $base-line-height / $base-font-size;
+    background-color: $base-background-color;
+    color: $base-font-color;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+body {
+	min-height: 100%;
+}
+
+
+//	Headings
+// ------------------------------------------------ \
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: $base-heading-font-stack;
+	line-height: $base-heading-line-height;
+	color: $base-heading-font-color;
+	font-weight: $base-heading-font-weight;
+}
+
+
+h1, .h1, %h1 { @include font-size($base-heading-font-size-h1); }
+h2, .h2, %h2 { @include font-size($base-heading-font-size-h2); }
+h3, .h3, %h3 { @include font-size($base-heading-font-size-h3); }
+h4, .h4, %h4 { @include font-size($base-heading-font-size-h4); }
+h5, .h5, %h5 { @include font-size($base-heading-font-size-h5); }
+h6, .h6, %h6 { @include font-size($base-heading-font-size-h6); }
+
+
+//	Paragraphs
+// ------------------------------------------------ \
+
+.lede, .lead {
+	@include font-size(18px);
+}
+
+
+//	Images
+// ------------------------------------------------ \
+
+img {
+    max-width: 100%;
+    font-style: italic;
+}
+
+
+//	Links
+// ------------------------------------------------ \
+
+a, a:visited {
+	color: $base-link-color;
+	text-decoration: underline;
+	transition: color 0.2s ease-in-out;
+}
+
+a:hover,
+a:focus {
+	color: $base-link-hover-color;
+}
+
+
+//	Lists
+// ------------------------------------------------ \
+
+// Remove vertical spacing on nested lists
+
+li {
+
+    > ul,
+    > ol {
+        margin-bottom: 0;
+    }
+
+}
+
+// unstyled lists
+
+.unstyled {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+
+//	Code
+// ------------------------------------------------ \
+
+code {
+	background: #f5f2f0;
+	border: 1px solid $grey;
+	color: $dark;
+	padding: $base-space--quarter/3 $base-space--quarter;
+	font-family: Monaco, Verdana, "Dejavu Sans", sans-serif ;
+	border-radius: 3px;
+	white-space: nowrap;
+	font-size: inherit;
+}
+
+// keyboard inputs
+kbd {
+	background: $dark;
+	color: white;
+	padding: $base-space--quarter/3 $base-space--quarter;
+	font-family: Monaco, Verdana, "Dejavu Sans", sans-serif ;
+	border-radius: 3px;
+	@include font-size(14px);
+}
+
+pre {
+	display: block;
+	overflow: auto;
+	max-width: 500px;
+	word-break: break-all; /* webkit */
+	word-wrap: break-word;
+	white-space: pre;
+	white-space: -moz-pre-wrap; /* fennec */
+	white-space: pre-wrap;
+	white-space: pre\9; /* IE7+ */
+	padding-top: $base-space;
+	color: $dark;
+	background: #f5f2f0;
+	border-radius: 4px;
+	border: 1px solid $grey;
+	
+	> :last-child {
+		margin-bottom: 0;
+	}
+}
+
+
+//	Tables
+// ------------------------------------------------ \
+
+table {
+  border-collapse: collapse;
+  margin: $base-space--half 0;
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: $base-space;
+}
+
+th {
+  border: 1px solid $light;
+  font-weight: bold;
+  padding: ($base-line-height / 2) 0;
+  text-align: left;
+  padding: $base-space--half;
+  color: $dark;
+}
+
+td {
+  border: 1px solid $light;
+  padding: $base-space--half 0;
+  padding: $base-space--half;
+}
+
+tr, td, th {
+  vertical-align: middle;
+}
+
+
+//	Forms
+// ------------------------------------------------ \
+
+fieldset {
+	background: none;
+	border: 1px solid $light;
+	padding: $base-space;
+	margin-bottom: $base-space;
+
+	legend {
+		padding: 0 $base-space--half;
+		color: $dark;
+	}
+}
+
+label {
+	margin-bottom: $base-space--quarter;
+	display: inline-block;
+	color: $dark;
+
+	&.required:after {
+	content: "*";
+	}
+
+	abbr {
+	display: none;
+	}
+
+}
+
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[type="number"],
+input[type="password"],
+textarea {
+	width: 100%;
+	display: block;
+	font-size: 14px;
+	color: $med-grey;
+	margin-bottom: $base-space;
+	outline: none;
+	border: 1px solid transparent;
+	border-radius: 1px;
+	padding: $base-space--quarter;
+	box-shadow: none;
+	background: darken($off-white, 2%);
+	transition: border 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background 0.4s ease-in-out;
+
+	&:hover {
+		border: 1px solid $grey;
+	}
+
+	&:focus {
+		border: 1px solid $grey;
+		box-shadow: 0 0 5px 0 #ccc;
+		background: $off-white;
+	}
+
+}
+
+textarea {
+  resize: vertical;
+}
+
+input[type="submit"] {
+	background: none;
+	border: 1px solid transparent;
+	padding: $base-space--half $base-space;
+	color: $dark;
+	border-radius: 1px;
+	outline: none;
+	transition: border 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background 0.4s ease-in-out;
+	box-shadow: none;
+	background: darken($off-white, 2%);
+
+	&:hover,
+	&:focus {
+		border: 1px solid $grey;
+		box-shadow: 0 0 5px 0 #ccc;
+		background: $off-white;
+	}
+
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline;
+  margin-right: $base-space--quarter;
+}
+
+input[type="file"] {
+  margin-bottom: $base-space--quarter;
+  padding-bottom: $base-space--quarter;
+  width: 100%;
+}
+
+select {
+  margin-bottom: $base-space;
+  max-width: 100%;
+  width: auto;
+}

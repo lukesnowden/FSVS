@@ -1,0 +1,1 @@
+!function(n){n.fn.fsvs=function(){var t={},f=function(f){var i=n(f);i.data("fsvs",t)};return n(this).each(function(n){f(this,n)})}}(jQuery);

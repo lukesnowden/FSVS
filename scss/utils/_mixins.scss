@@ -1,0 +1,57 @@
+//
+//	Mixins
+// ------------------------------------------------ \
+
+
+//	Auto sizing and vertical rhythm on type
+// ------------------------------------------------ \
+
+@mixin font-size($font-size, $line-height: true) {
+	font-size: $font-size;
+	font-size: ($font-size / $base-font-size) * 1rem;
+	line-height: ceil($font-size / $base-line-height) * ($base-line-height / $font-size);
+}
+
+
+//	Simple media query breakpoint mixins
+// ------------------------------------------------ \
+
+// min and max values
+@mixin minmax($min, $max)
+{
+  @media screen and (min-width: $min) and (max-width: $max)
+  {
+    @content;
+  }
+}
+
+// just min value
+@mixin min($min)
+{
+  @media screen and (min-width: $min)
+  {
+    @content;
+  }
+}
+
+// just max value
+@mixin max($max)
+{
+  @media screen and (max-width: $max)
+  {
+    @content;
+  }
+}
+
+
+//  Edit mode - Applies semi-transparent grey backgrounds
+//  to every element so you can see the structure easily
+//  while you develop.
+// ------------------------------------------------ \
+
+@mixin edit() {
+  * {
+    background: rgba(0, 0, 0, .05);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#10000000, endColorstr=#10000000);
+  }
+}
