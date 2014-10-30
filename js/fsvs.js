@@ -126,6 +126,24 @@
 		};
 
 		/**
+		 * [enteredViewPortFromAbove description]
+		 * @return {[type]} [description]
+		 */
+
+		var enteredViewPortFromAbove = function(){
+
+		};
+
+		/**
+		 * [enteredViewPortFromBelow description]
+		 * @return {[type]} [description]
+		 */
+
+		var enteredViewPortFromBelow = function() {
+
+		};
+
+		/**
 		 * [app play with me!]
 		 * @type {Object}
 		 */
