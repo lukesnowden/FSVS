@@ -17,7 +17,16 @@
 	 * @return {[type]}         [description]
 	 */
 
-	$.fn.fsvs = function( options ) {
+	$.fn.fsvs = function( _options ) {
+
+		/**
+		 * [options description]
+		 * @type {[type]}
+		 */
+
+		var options = $.extend({
+
+		}, _options );
 
 		/**
 		 * [isHijacked description]
@@ -79,6 +88,24 @@
 		 */
 
 		var afterSlide = function() {
+
+		};
+
+		/**
+		 * [isFirstSlide description]
+		 * @return {Boolean} [description]
+		 */
+
+		var isFirstSlide = function() {
+
+		};
+
+		/**
+		 * [isLastSlide description]
+		 * @return {Boolean} [description]
+		 */
+
+		var isLastSlide = function() {
 
 		};
 
