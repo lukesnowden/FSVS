@@ -20,11 +20,110 @@
 	$.fn.fsvs = function( options ) {
 
 		/**
+		 * [isHijacked description]
+		 * @return {Boolean} [description]
+		 */
+
+		var isHijacked = function() {
+
+		};
+
+		/**
+		 * [canSlideUp description]
+		 * @return {[type]} [description]
+		 */
+
+		var canSlideUp = function() {
+
+		};
+
+		/**
+		 * [canSlideDown description]
+		 * @return {[type]} [description]
+		 */
+
+		var canSlideDown = function() {
+
+		};
+
+		/**
+		 * [slideUp description]
+		 * @return {[type]} [description]
+		 */
+
+		var slideUp = function() {
+
+		};
+
+		/**
+		 * [slideDown description]
+		 * @return {[type]} [description]
+		 */
+
+		var slideDown = function() {
+
+		};
+
+		/**
+		 * [slideToIndex description]
+		 * @return {[type]} [description]
+		 */
+
+		var slideToIndex = function() {
+
+		};
+
+		/**
+		 * [afterSlide description]
+		 * @return {[type]} [description]
+		 */
+
+		var afterSlide = function() {
+
+		};
+
+		/**
 		 * [app description]
 		 * @type {Object}
 		 */
 
 		var app = {
+
+			/**
+			 * [slideUp description]
+			 * @return {[type]} [description]
+			 */
+
+			slideUp : function() {
+
+			},
+
+			/**
+			 * [slideDown description]
+			 * @return {[type]} [description]
+			 */
+
+			slideDown : function() {
+
+			},
+
+			/**
+			 * [slideTo description]
+			 * @return {[type]} [description]
+			 */
+
+			slideTo : function() {
+
+			},
+
+			/**
+			 * [slideToIndex description]
+			 * @return {[type]} [description]
+			 */
+
+			slideToIndex : function() {
+
+			}
 
 		};
 

@@ -1,1 +1,1 @@
-!function(n){n.fn.fsvs=function(){var t={},f=function(f){var i=n(f);i.data("fsvs",t)};return n(this).each(function(n){f(this,n)})}}(jQuery);
+!function(n){n.fn.fsvs=function(){var i={slideUp:function(){},slideDown:function(){},slideTo:function(){},slideToIndex:function(){}},t=function(t){var f=n(t);f.data("fsvs",i)};return n(this).each(function(n){t(this,n)})}}(jQuery);
