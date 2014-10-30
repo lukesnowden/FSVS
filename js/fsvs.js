@@ -29,6 +29,15 @@
 		}, _options );
 
 		/**
+		 * [isYoungAndHip - you know I'm not talking about Internet Explorer]
+		 * @return {Boolean} [description]
+		 */
+
+		var isYoungAndHip = function() {
+
+		};
+
+		/**
 		 * [jqElm the FSVS jQuery object]
 		 * @type {[type]}
 		 */
