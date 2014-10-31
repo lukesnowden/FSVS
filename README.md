@@ -15,7 +15,7 @@ $(document).ready( function() {
 		beforeSlide : function(){},
 		endSlide : function(){},
 		mouseWheelEvents : true,
-		mouseWheelDelay : 250,
+		mouseWheelDelay : false,
 		mouseDragEvents : true,
 		touchEvents : true,
 		arrowKeyEvents : true,

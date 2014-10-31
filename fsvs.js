@@ -27,7 +27,7 @@
 			beforeSlide : function(){},
 			endSlide : function(){},
 			mouseWheelEvents : true,
-			mouseWheelDelay : 250,
+			mouseWheelDelay : false,
 			mouseDragEvents : true,
 			touchEvents : true,
 			arrowKeyEvents : true,
@@ -230,7 +230,7 @@
 				// chrome seems to extends its "wheely" motion
 				wheely = Math.floor( wheely / 5 );
 			}
-			if( ( ! scrolling || Date.now() > mouseWheelScrollStart + options.mouseWheelDelay ) && Math.abs( wheely ) > 5 ) {
+			if( ( ! scrolling || ( options.mouseWheelDelay && Date.now() > mouseWheelScrollStart + options.mouseWheelDelay ) ) && Math.abs( wheely ) > 5 ) {
 				mouseWheelScrollStart = Date.now();
 				scrolling = true;
 				// Firefox goes backwards... obviously
