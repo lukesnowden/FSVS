@@ -58,11 +58,25 @@
 		var handelerInterval = null;
 
 		/**
+		 * [height description]
+		 * @type {Number}
+		 */
+
+		var height = 0;
+
+		/**
 		 * [handelerStart description]
 		 * @type {[type]}
 		 */
 
 		var handelerStart = false;
+
+		/**
+		 * [animated description]
+		 * @type {Boolean}
+		 */
+
+		var animated = false;
 
 		/**
 		 * [jqElmOffset description]
@@ -109,7 +123,7 @@
 		 */
 
 		var canSlideUp = function() {
-
+			return ( currentSlideIndex + 1 ) !== $( '> div > div', jqElm ).length;
 		};
 
 		/**
@@ -118,7 +132,7 @@
 		 */
 
 		var canSlideDown = function() {
-
+			return currentSlideIndex !== 0;
 		};
 
 		/**
@@ -127,7 +141,7 @@
 		 */
 
 		var slideUp = function() {
-
+			if( canSlideUp() ) slideToIndex( currentSlideIndex + 1 );
 		};
 
 		/**
@@ -136,7 +150,7 @@
 		 */
 
 		var slideDown = function() {
-
+			if( canSlideDown() ) slideToIndex( currentSlideIndex - 1 );
 		};
 
 		/**
@@ -144,8 +158,8 @@
 		 * @return {[type]} [description]
 		 */
 
-		var slideToIndex = function() {
-
+		var slideToIndex = function( index ) {
+			cssSlide( index );
 		};
 
 		/**
@@ -238,9 +252,7 @@
 		var nthClasses = function( nthClassLimit ) {
 			$( '> div > div', jqElm ).each( function( i ) {
 				var nthClass = 'nth-class-' + ((i%options.nthClasses)+1);
-				if( ! $(this).hasClass( nthClass ) ) {
-					$(this).addClass( nthClass );
-				}
+				if( ! $(this).hasClass( nthClass ) ) $(this).addClass( nthClass );
 			});
 		};
 
@@ -326,7 +338,7 @@
 		 */
 
 		var bindScrollingEvent = function() {
-			$(window).bind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
+			$(w).bind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
 		};
 
 		/**
@@ -335,8 +347,8 @@
 		 */
 
 		var bindKeyArrows = function() {
-			window.onkeydown = function(e) {
-				e = e || window.event;
+			w.onkeydown = function(e) {
+				e = e || w.event;
 			    if ( e.keyCode == '38' ) slideUp();
 			    else if ( e.keyCode == '40' ) slideDown();
 			};
@@ -348,7 +360,7 @@
 
 		var setDimentions = function() {
 			var width = $(w).width();
-			var height = $(w).height();
+			height = $(w).height();
 			jqElm.width( width ).height( height );
 			$( '> div > div', jqElm ).width( width ).height( height );
 		};
@@ -375,15 +387,18 @@
 		 */
 
 		var cssSlide = function( index ) {
+			if( animated ) return;
+			animated = true;
 			beforeSlide( index );
-			$( '> div', body ).css({
-				'-webkit-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
-				'-moz-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
-				'-ms-transform' : 'translate3d(0, -' + (index*100) + '%, 0)',
-				'transform' : 'translate3d(0, -' + (index*100) + '%, 0)'
+			$( '> div', jqElm ).css({
+				'-webkit-transform' : 'translate3d(0, -' + (index*height) + 'px, 0)',
+				'-moz-transform' : 'translate3d(0, -' + (index*height) + 'px, 0)',
+				'-ms-transform' : 'translate3d(0, -' + (index*height) + 'px, 0)',
+				'transform' : 'translate3d(0, -' + (index*height) + 'px, 0)'
 			});
 			bodyTimeout = setTimeout( function(){
-				currentSlideIndex = index + 1;
+				animated = false;
+				currentSlideIndex = index;
 				afterSlide( index );
 			}, options.speed );
 		}
@@ -447,12 +462,9 @@
 			setDimentions();
 			bindScrollingEvent();
 			setSpeed( options.speed );
-			if( options.nthClasses ) {
-				nthClasses();
-			}
-
+			if( options.nthClasses ) nthClasses();
+			if( options.arrowKeyEvents ) bindKeyArrows();
 			jqElm.data( 'fsvs', new app() );
-
 			$(w).resize( setDimentions );
 
 		};
