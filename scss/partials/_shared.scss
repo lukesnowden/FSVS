@@ -1,3 +1,26 @@
 //
 //	Shared common styles
 // ------------------------------------------------ \
+
+html.hijacked {
+	overflow: hidden;
+}
+
+.fsvs {
+	overflow: hidden;
+	> div {
+		> div {
+			height: 100%;
+			background: red;
+			&:nth-child( 2 ) {
+				background: blue;
+			}
+			&:nth-child( 3 ) {
+				background: green;
+			}
+			&:nth-child( 4 ) {
+				background: yellow;
+			}
+		}
+	}
+}

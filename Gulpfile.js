@@ -15,7 +15,7 @@ var gulp 					= require('gulp'),
 	 * deploying and re-run gulp
 	 */
 
-	local					= false,
+	local					= true,
 	destination 			= 'assets/';
 
 
