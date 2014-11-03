@@ -8,7 +8,11 @@ html.hijacked {
 
 .fsvs {
 	overflow: hidden;
+	position: relative;
 	> div {
+		position: absolute;
+		top: 0;
+		left: 0;
 		> div {
 			height: 100%;
 			background: red;

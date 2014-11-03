@@ -25,7 +25,7 @@
 		 */
 
 		var options = $.extend({
-			speed 				: 5000,
+			speed 				: 500,
 	        mouseSwipeDisance 	: 40,
 	        mouseWheelDelay 	: false,
 	        mouseDragEvents 	: true,
@@ -98,7 +98,13 @@
 		 */
 
 		var isYoungAndHip = function() {
-
+			prefixes = ['Webkit','Moz','ms','O'];
+		   	for( var i in prefixes ) {
+		   		if( typeof document.getElementsByTagName( 'body' )[0].style[prefixes[i] + 'Transform' ] !== 'undefined' ) {
+		   			return true;
+		   		}
+		   	}
+		    return false;
 		};
 
 		/**
@@ -159,7 +165,11 @@
 		 */
 
 		var slideToIndex = function( index ) {
-			cssSlide( index );
+			if( isYoungAndHip() ) {
+				cssSlide( index );
+			} else {
+				animateSlide( index );
+			}
 		};
 
 		/**
@@ -402,6 +412,24 @@
 				afterSlide( index );
 			}, options.speed );
 		}
+
+		/**
+		 * [animateSlide description]
+		 * @param  {[type]} index [description]
+		 * @return {[type]}       [description]
+		 */
+
+		var animateSlide = function( index ) {
+			if( animated ) return;
+			animated = true;
+			$( '> div', jqElm ).animate({
+				top : '-' + (index*height) + 'px'
+			}, options.speed, function() {
+				animated = false;
+				currentSlideIndex = index;
+				afterSlide( index );
+			});
+		};
 
 		/**
 		 * [app play with me!]
