@@ -1,4 +1,3 @@
-
 /*!
 * 	@plugin 	FSVS - Full Screen Vertical Scroller
 * 	@version 	2.0.0
@@ -38,61 +37,202 @@
 
 		/**
 		 * [fsvs description]
-		 * @param  {[type]} _this [description]
-		 * @param  {[type]} _i    [description]
-		 * @return {[type]}       [description]
+		 * @type {Array}
 		 */
 
-		var fsvs = function( _this, _i ) {
+		var fsvsObjects = [];
+
+		/**
+		 * [isCustomScrollHandelerActive description]
+		 * @type {Boolean}
+		 */
+
+		var isCustomScrollHandelerActive = false;
+
+		/**
+		 * [handelerInterval description]
+		 * @type {[type]}
+		 */
+
+		var handelerInterval = null;
+
+		/**
+		 * [wheelEvent description]
+		 * @type {[type]}
+		 */
+
+		var wheelEvent = null;
+
+		/**
+		 * [handelerStart description]
+		 * @type {Number}
+		 */
+
+		var handelerStart = 0;
+
+		/**
+		 * [windowScrollTop description]
+		 * @type {Number}
+		 */
+
+		var windowScrollTop = 0;
+
+		/**
+		 * [anyActiveFSVS description]
+		 * @return {[type]} [description]
+		 */
+
+		var anyActiveFSVS = function() {
+			for( var i in fsvsObjects ) {
+				if( fsvsObjects[i].fsvs.isActivated() ) {
+					return fsvsObjects[i];
+				}
+			}
+			return false;
+		};
+
+		/**
+		 * [scrollingDown description]
+		 * @param  {[type]} e [description]
+		 * @return {[type]}   [description]
+		 */
+
+		var scrollingDown = function( e ) {
+			return ! scrollingUp( e );
+		};
+
+		/**
+		 * [scrollingUp description]
+		 * @param  {[type]} e [description]
+		 * @return {[type]}   [description]
+		 */
+
+		var scrollingUp = function( e ) {
+			return e.originalEvent.detail < 0 || e.originalEvent.wheelDelta > 0;
+		};
+
+		/**
+		 * [isChrome description]
+		 * @reference http://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome
+		 * @return {Boolean} [description]
+		 */
+
+		var isChrome = function() {
+			var isChromium = window.chrome,
+			    vendorName = window.navigator.vendor;
+			if( isChromium !== null && vendorName === "Google Inc." ) {
+			   return true;
+			}
+			return false;
+		};
+
+		/**
+		 * [isYoungAndHip - you know I'm not talking about Internet Explorer]
+		 * @return {Boolean} [description]
+		 */
+
+		var isYoungAndHip = function() {
+			prefixes = ['Webkit','Moz','ms','O'];
+		   	for( var i in prefixes ) {
+		   		if( typeof document.getElementsByTagName( 'body' )[0].style[prefixes[i] + 'Transform' ] !== 'undefined' ) {
+		   			return true;
+		   		}
+		   	}
+		    return false;
+		};
+
+		/**
+		 * [customScrollHandeler description]
+		 * @param  {[type]}   e        [description]
+		 * @param  {Function} callback [description]
+		 * @return {[type]}            [description]
+		 */
+
+		var customScrollHandeler = function( callback ) {
+			isCustomScrollHandelerActive = true;
+			handelerInterval = setInterval( function(){
+				if( ( Date.now() - handelerStart ) > 100 ) {
+					isCustomScrollHandelerActive = false;
+					clearInterval( handelerInterval );
+				} else {
+					callback();
+				}
+			}, 10 );
+		};
+
+		/**
+		 * [mouseWheelHandler description]
+		 * @param  {[type]} e [description]
+		 * @return {[type]}   [description]
+		 */
+
+		var mouseWheelHandler = function(e) {
+			wheelEvent = e;
+			handelerStart = Date.now();
+			if( ! isCustomScrollHandelerActive ) {
+				customScrollHandeler( function(){
+
+					var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
+					windowScrollTop = $(w).scrollTop();
+
+					if( activeFSVS = anyActiveFSVS() ) {
+						fsvsClass = activeFSVS.fsvs;
+						fsvsClass.setOffset();
+						if( ! fsvsClass.isAnimated() && wheely > 1 ) {
+							if( fsvsClass.isFirstSlide() && ! scrollingDown( wheelEvent ) ) {
+								wheelEvent.preventDefault();
+								fsvsClass.unjackScreen();
+							} else if( fsvsClass.isLastSlide() && scrollingDown( wheelEvent ) ) {
+								wheelEvent.preventDefault();
+								fsvsClass.unjackScreen();
+							} else if( scrollingDown( wheelEvent ) ) {
+								fsvsClass.slideUp();
+							} else {
+								fsvsClass.slideDown();
+							}
+						}
+					} else {
+						for( var i in fsvsObjects ) {
+							var fsvs = fsvsObjects[i];
+							var fsvsClass = fsvs.fsvs;
+							fsvsClass.setOffset();
+							if( ! fsvsClass.isAnimated() ) {
+								if( fsvsClass.isFirstSlide() && fsvsClass.enteredViewPortFromAbove( wheelEvent ) ) {
+									fsvsClass.hijackScreen();
+								} else if( fsvsClass.isLastSlide() && fsvsClass.enteredViewPortFromBelow( wheelEvent ) ) {
+									console.log('a');
+									fsvsClass.hijackScreen();
+								}
+							}
+						}
+					}
+
+				});
+			}
+		};
+
+		/**
+		 * [bindScrollingEvent description]
+		 * @return {[type]} [description]
+		 */
+
+		var bindScrollingEvent = function() {
+			$(w).bind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
+		};
+
+		/**
+		 * [fsvsApp description]
+		 * @return {[type]} [description]
+		 */
+
+		var fsvsApp = function( elm ) {
 
 			/**
-			 * [windowScrollTop description]
-			 * @type {Number}
-			 */
-
-			var windowScrollTop = 0;
-
-			/**
-			 * [isCustomeScrollHandelerActive description]
-			 * @type {Boolean}
-			 */
-
-			var isCustomScrollHandelerActive = false;
-
-			/**
-			 * [handelerInterval description]
+			 * [jqElm description]
 			 * @type {[type]}
 			 */
 
-			var handelerInterval = null;
-
-			/**
-			 * [height description]
-			 * @type {Number}
-			 */
-
-			var height = 0;
-
-			/**
-			 * [handelerStart description]
-			 * @type {[type]}
-			 */
-
-			var handelerStart = false;
-
-			/**
-			 * [animated description]
-			 * @type {Boolean}
-			 */
-
-			var animated = false;
-
-			/**
-			 * [jqElmOffset description]
-			 * @type {Object}
-			 */
-
-			var jqElmOffset = {};
+			var jqElm = $(elm);
 
 			/**
 			 * [currentSlideIndex description]
@@ -102,34 +242,198 @@
 			var currentSlideIndex = 0;
 
 			/**
-			 * [isYoungAndHip - you know I'm not talking about Internet Explorer]
-			 * @return {Boolean} [description]
+			 * [speed description]
+			 * @type {Number}
 			 */
 
-			var isYoungAndHip = function() {
-				prefixes = ['Webkit','Moz','ms','O'];
-			   	for( var i in prefixes ) {
-			   		if( typeof document.getElementsByTagName( 'body' )[0].style[prefixes[i] + 'Transform' ] !== 'undefined' ) {
-			   			return true;
-			   		}
-			   	}
-			    return false;
+			var speed = 0;
+
+			/**
+			 * [height description]
+			 * @type {Number}
+			 */
+
+			var height = 0;
+
+			/**
+			 * [jqElmOffset description]
+			 * @type {Number}
+			 */
+
+			var jqElmOffset = 0;
+
+			/**
+			 * [animated description]
+			 * @type {Boolean}
+			 */
+
+			var animated = false;
+
+			/**
+			 * [activated description]
+			 * @type {Boolean}
+			 */
+
+			var activated = false;
+
+			/**
+			 * [unjackScreen description]
+			 * @return {[type]}           [description]
+			 */
+
+			this.unjackScreen = function() {
+				$('html').removeClass( 'hijacked' );
+				activated = false;
 			};
 
 			/**
-			 * [jqElm the FSVS jQuery object]
-			 * @type {[type]}
+			 * [setOffset description]
 			 */
 
-			var jqElm = null;
+			this.setOffset = function() {
+				jqElmOffset = jqElm.offset();
+			};
 
 			/**
-			 * [isHijacked check if we are currently being hijacked]
+			 * [slideUp description]
+			 * @return {[type]} [description]
+			 */
+
+			this.slideUp = function() {
+				if( canSlideUp() ) {
+					this.slideToIndex( currentSlideIndex + 1 );
+				}
+			};
+
+			/**
+			 * [slideDown description]
+			 * @return {[type]} [description]
+			 */
+
+			this.slideDown = function() {
+				if( canSlideDown() ) {
+					this.slideToIndex( currentSlideIndex - 1 );
+				}
+			};
+
+			/**
+			 * [slideToIndex description]
+			 * @param  {[type]} index [description]
+			 * @return {[type]}       [description]
+			 */
+
+			this.slideToIndex = function( index ) {
+				if( isYoungAndHip() ) {
+					cssSlide( index );
+				} else {
+					animateSlide( index );
+				}
+			};
+
+			/**
+			 * [isAnimated description]
 			 * @return {Boolean} [description]
 			 */
 
-			var isHijacked = function() {
+			this.isAnimated = function() {
+				return animated;
+			};
+
+			/**
+			 * [isHijacked description]
+			 * @return {Boolean} [description]
+			 */
+
+			this.isHijacked = function() {
 				return $('html').hasClass( 'hijacked' );
+			};
+
+			/**
+			 * [isFirstSlide Cant he go instead? I don't want to go first!]
+			 * @return {Boolean} [description]
+			 */
+
+			this.isFirstSlide = function() {
+				return currentSlideIndex === 0;
+			};
+
+			/**
+			 * [isLastSlide last but not least... or is it?]
+			 * @return {Boolean} [description]
+			 */
+
+			this.isLastSlide = function() {
+				return currentSlideIndex === ( $( '> div > div', jqElm ).length - 1 );
+			};
+
+			/**
+			 * [enteredViewPortFromAbove description]
+			 * @param  {[type]} e [description]
+			 * @return {[type]}   [description]
+			 */
+
+			this.enteredViewPortFromAbove = function(e){
+				if( ! this.isHijacked() ) {
+					if( scrollingDown(e) && jqElmOffset.top <= windowScrollTop ) {
+						activeJqElm = jqElm;
+						return true;
+					}
+				}
+				return false;
+			};
+
+			/**
+			 * [enteredViewPortFromBelow description]
+			 * @return {[type]} [description]
+			 */
+
+			this.enteredViewPortFromBelow = function(e) {
+				if( ! this.isHijacked() ) {
+					if( scrollingUp(e) && windowScrollTop <= jqElmOffset.top ) {
+						return true;
+					}
+				}
+				return false;
+			};
+
+			/**
+			 * [isActivated description]
+			 * @return {Boolean} [description]
+			 */
+
+			this.isActivated = function() {
+				return activated;
+			};
+
+			/**
+			 * [hijackScreen description]
+			 * @return {[type]} [description]
+			 */
+
+			this.hijackScreen = function() {
+				$("html, body").scrollTop( jqElmOffset.top );
+				$('html').addClass( 'hijacked' );
+				activated = true;
+			};
+
+			/**
+			 * [beforeSlide description]
+			 * @param  {[type]} index [description]
+			 * @return {[type]}       [description]
+			 */
+
+			var beforeSlide = function( index ) {
+
+			};
+
+			/**
+			 * [afterSlide description]
+			 * @param  {[type]} index [description]
+			 * @return {[type]}       [description]
+			 */
+
+			var afterSlide = function( index ) {
+
 			};
 
 			/**
@@ -151,130 +455,6 @@
 			};
 
 			/**
-			 * [slideUp slide up mother trucker!]
-			 * @return {[type]} [description]
-			 */
-
-			var slideUp = function() {
-				if( canSlideUp() ) {
-					slideToIndex( currentSlideIndex + 1 );
-				}
-			};
-
-			/**
-			 * [slideDown your going down!]
-			 * @return {[type]} [description]
-			 */
-
-			var slideDown = function() {
-				if( canSlideDown() ) {
-					slideToIndex( currentSlideIndex - 1 );
-				}
-			};
-
-			/**
-			 * [slideToIndex go to slide, minus the 1]
-			 * @return {[type]} [description]
-			 */
-
-			var slideToIndex = function( index ) {
-				if( isYoungAndHip() ) {
-					cssSlide( index );
-				} else {
-					animateSlide( index );
-				}
-			};
-
-			/**
-			 * [afterSlide ok, I've slid... what next]
-			 * @return {[type]} [description]
-			 */
-
-			var afterSlide = function( index ) {
-				bindScrollingEvent();
-			};
-
-			/**
-			 * [beforeSlide description]
-			 * @return {[type]} [description]
-			 */
-
-			var beforeSlide = function( index ) {
-
-			};
-
-			/**
-			 * [isFirstSlide Cant he go instead? I don't want to go first!]
-			 * @return {Boolean} [description]
-			 */
-
-			var isFirstSlide = function() {
-				return currentSlideIndex === 0;
-			};
-
-			/**
-			 * [isLastSlide last but not least... or is it?]
-			 * @return {Boolean} [description]
-			 */
-
-			var isLastSlide = function() {
-				return currentSlideIndex === ( $( '> div > div', jqElm ).length - 1 );
-			};
-
-			/**
-			 * [hijackScreen description]
-			 * @return {[type]} [description]
-			 */
-
-			var hijackScreen = function() {
-				$("html, body").scrollTop( jqElmOffset.top );
-				$('html').addClass( 'hijacked' );
-			};
-
-			/**
-			 * [unjackScreen description]
-			 * @return {[type]}           [description]
-			 */
-			var unjackScreen = function() {
-				$('html').removeClass( 'hijacked' );
-			};
-
-			/**
-			 * [scrollingDown description]
-			 * @param  {[type]} e [description]
-			 * @return {[type]}   [description]
-			 */
-
-			var scrollingDown = function( e ) {
-				return ! scrollingUp( e );
-			};
-
-			/**
-			 * [scrollingUp description]
-			 * @param  {[type]} e [description]
-			 * @return {[type]}   [description]
-			 */
-
-			var scrollingUp = function( e ) {
-				return e.originalEvent.detail < 0 || e.originalEvent.wheelDelta > 0;
-			};
-
-			/**
-			 * [isChrome description]
-			 * @reference http://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome
-			 * @return {Boolean} [description]
-			 */
-
-			var isChrome = function() {
-				var isChromium = window.chrome,
-				    vendorName = window.navigator.vendor;
-				if( isChromium !== null && vendorName === "Google Inc." ) {
-				   return true;
-				}
-				return false;
-			};
-
-			/**
 			 * [nthClasses description]
 			 * @param  {[type]} nthClassLimit [description]
 			 * @return {[type]}               [description]
@@ -285,123 +465,6 @@
 					var nthClass = 'nth-class-' + ((i%options.nthClasses)+1);
 					if( ! $(this).hasClass( nthClass ) ) $(this).addClass( nthClass );
 				});
-			};
-
-			/**
-			 * [enteredViewPortFromAbove description]
-			 * @return {[type]} [description]
-			 */
-
-			var enteredViewPortFromAbove = function(e){
-				if( ! isHijacked() ) {
-					if( scrollingDown(e) && windowScrollTop == jqElmOffset.top ) {
-						return true;
-					}
-				}
-				return false;
-			};
-
-			/**
-			 * [enteredViewPortFromBelow description]
-			 * @return {[type]} [description]
-			 */
-
-			var enteredViewPortFromBelow = function(e) {
-				if( ! isHijacked() ) {
-					if( scrollingUp(e) && windowScrollTop == jqElmOffset.top ) {
-						return true;
-					}
-				}
-				return false;
-			};
-
-			/**
-			 * [customScrollHandeler description]
-			 * @param  {[type]}   e        [description]
-			 * @param  {Function} callback [description]
-			 * @return {[type]}            [description]
-			 */
-
-			var customScrollHandeler = function( e, callback ) {
-				isCustomScrollHandelerActive = true;
-				handelerInterval = setInterval( function(){
-					if( ( Date.now() - handelerStart ) > 100 ) {
-						isCustomScrollHandelerActive = false;
-						clearInterval( handelerInterval );
-					} else {
-						callback(e);
-					}
-				}, 10 );
-			}
-
-			/**
-			 * [mouseWheelHandler description]
-			 * @param  {[type]} e [description]
-			 * @return {[type]}   [description]
-			 */
-
-			var mouseWheelHandler = function(e) {
-				window.wheelEvent = e;
-				handelerStart = Date.now();
-				if( ! isCustomScrollHandelerActive ) {
-					customScrollHandeler( false, function(){
-
-						//@todo: only donw this for chrome while getting the rest working, then I'll sort the other browsers out
-
-						var wheely = Number( ( Math.abs( window.wheelEvent.originalEvent.wheelDelta ) / 50 ).toFixed(0) );
-						windowScrollTop = $(window).scrollTop();
-						jqElmOffset = jqElm.offset();
-
-						if( isHijacked() && ! animated && isFirstSlide() && wheely > 1 && ! scrollingDown( window.wheelEvent ) ) {
-							window.wheelEvent.preventDefault();
-							unjackScreen();
-						} else if( isHijacked() && ! animated && isLastSlide() && wheely > 1 && scrollingDown( window.wheelEvent ) ) {
-							window.wheelEvent.preventDefault();
-							unjackScreen();
-						} else if( isFirstSlide() && enteredViewPortFromAbove( window.wheelEvent ) ) {
-							hijackScreen();
-						} else if( isLastSlide() && enteredViewPortFromBelow( window.wheelEvent ) ) {
-							hijackScreen();
-						} else if( isHijacked() && ! animated && wheely > 1 ) {
-							if( scrollingDown( window.wheelEvent ) ) {
-								slideUp();
-							} else {
-								slideDown();
-							}
-						}
-					});
-				}
-			};
-
-			/**
-			 * [bindScrollingEvent description]
-			 * @return {[type]} [description]
-			 */
-
-			var bindScrollingEvent = function() {
-				$(w).bind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
-			};
-
-			/**
-			 * [unbindScrollingEvent description]
-			 * @return {[type]} [description]
-			 */
-
-			var unbindScrollingEvent = function() {
-				$(w).unbind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
-			};
-
-			/**
-			 * [bindKeyArrows description]
-			 * @return {[type]} [description]
-			 */
-
-			var bindKeyArrows = function() {
-				w.onkeydown = function(e) {
-					e = e || w.event;
-				    if ( e.keyCode == '38' ) slideUp();
-				    else if ( e.keyCode == '40' ) slideDown();
-				};
 			};
 
 			/**
@@ -471,84 +534,17 @@
 				});
 			};
 
-			/**
-			 * [app play with me!]
-			 * @type {Object}
-			 */
-
-			var app = function(){
-
-				/**
-				 * [slideUp how am I sliding up? as is?]
-				 * @return {[type]} [description]
-				 */
-
-				this.slideUp = function() {
-					slideUp();
-				};
-
-				/**
-				 * [slideDown how am I sliding down? as is?]
-				 * @return {[type]} [description]
-				 */
-
-				this.slideDown = function() {
-					slideDown();
-				};
-
-				/**
-				 * [slideTo description]
-				 * @return {[type]} [description]
-				 */
-
-				this.slideTo = function( number ) {
-					slideToIndex( number-1 );
-				},
-
-				/**
-				 * [slideToIndex description]
-				 * @return {[type]} [description]
-				 */
-
-				this.slideToIndex = function( index ) {
-					slideToIndex( index );
-				}
-
-			};
-
-			/**
-			 * [init description]
-			 * @param  {[type]} elm   [description]
-			 * @param  {[type]} index [description]
-			 * @return {[type]}       [description]
-			 */
-
-			var init = function( elm, index ) {
-
-				jqElm = $( elm );
-
-				setDimentions();
-				bindScrollingEvent();
-				setSpeed( options.speed );
-				if( options.nthClasses ) nthClasses();
-				if( options.arrowKeyEvents ) bindKeyArrows();
-				jqElm.data( 'fsvs', new app() );
-				$(w).resize( setDimentions );
-
-			};
-
-			init( _this, _i );
+			setDimentions();
+			setSpeed( options.speed );
+			$(w).resize( setDimentions );
 
 		};
 
-		/**
-		 * [description]
-		 * @param  {[type]} i [description]
-		 * @return {[type]}   [description]
-		 */
+		bindScrollingEvent();
 
-		return this.each( function ( i ) {
-			new fsvs( this, i  );
+		return $(this).each( function(){
+			this.fsvs = new fsvsApp( this );
+			fsvsObjects.push(this);
 		});
 
 	};
