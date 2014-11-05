@@ -78,6 +78,13 @@
 		var windowScrollTop = 0;
 
 		/**
+		 * [lastScrollTop description]
+		 * @type {Number}
+		 */
+
+		var lastScrollTop = 0;
+
+		/**
 		 * [anyActiveFSVS description]
 		 * @return {[type]} [description]
 		 */
@@ -108,7 +115,12 @@
 		 */
 
 		var scrollingUp = function( e ) {
-			return e.originalEvent.detail < 0 || e.originalEvent.wheelDelta > 0;
+			if( e.type === 'scroll' ) {
+				var hasScrolledUp = lastScrollTop > windowScrollTop;
+				return hasScrolledUp;
+			} else {
+				return e.originalEvent.detail < 0 || e.originalEvent.wheelDelta > 0;
+			}
 		};
 
 		/**
@@ -179,36 +191,34 @@
 			}, 10 );
 		};
 
+		/**
+		 * [doTheFunkyStuff description]
+		 * @param  {[type]} wheely [description]
+		 * @param  {[type]} event  [description]
+		 * @return {[type]}        [description]
+		 */
+
 		var doTheFunkyStuff = function( wheely, event ) {
 
-			windowScrollTop = $(w).scrollTop();
-			if( activeFSVS = anyActiveFSVS() ) {
+			var activeFSVS = anyActiveFSVS();
+			if( activeFSVS ) {
 				fsvsClass = activeFSVS.fsvs;
 				fsvsClass.setOffset();
 				if( ! fsvsClass.isAnimated() && wheely > 1 ) {
 					if( fsvsClass.isFirstSlide() && ! scrollingDown( event ) ) {
 						event.preventDefault();
+						bindScrollHandeler();
+						unbindWheelHandeler();
 						fsvsClass.unjackScreen();
 					} else if( fsvsClass.isLastSlide() && scrollingDown( event ) ) {
 						event.preventDefault();
+						bindScrollHandeler();
+						unbindWheelHandeler();
 						fsvsClass.unjackScreen();
 					} else if( scrollingDown( event ) ) {
 						fsvsClass.slideUp();
 					} else {
 						fsvsClass.slideDown();
-					}
-				}
-			} else {
-				for( var i in fsvsObjects ) {
-					var fsvs = fsvsObjects[i];
-					var fsvsClass = fsvs.fsvs;
-					fsvsClass.setOffset();
-					if( ! fsvsClass.isAnimated() ) {
-						if( fsvsClass.isFirstSlide() && fsvsClass.enteredViewPortFromAbove( event ) ) {
-							fsvsClass.hijackScreen();
-						} else if( fsvsClass.isLastSlide() && fsvsClass.enteredViewPortFromBelow( event ) ) {
-							fsvsClass.hijackScreen();
-						}
 					}
 				}
 			}
@@ -234,12 +244,69 @@
 		};
 
 		/**
+		 * [scrollHandeler description]
+		 * @param  {[type]} e [description]
+		 * @return {[type]}   [description]
+		 */
+
+		var scrollHandeler = function(event) {
+			windowScrollTop = $(w).scrollTop();
+			var activeFSVS = anyActiveFSVS();
+			if( ! activeFSVS ) {
+				for( var i in fsvsObjects ) {
+					var fsvs = fsvsObjects[i];
+					var fsvsClass = fsvs.fsvs;
+					fsvsClass.setOffset();
+					if( ! fsvsClass.isAnimated() ) {
+						if( fsvsClass.isFirstSlide() && fsvsClass.enteredViewPortFromAbove( event ) ) {
+							fsvsClass.hijackScreen();
+							unbindScrollHandeler();
+							bindWheelHandeler();
+						} else if( fsvsClass.isLastSlide() && fsvsClass.enteredViewPortFromBelow( event ) ) {
+							fsvsClass.hijackScreen();
+							unbindScrollHandeler();
+							bindWheelHandeler();
+						}
+					}
+				}
+			}
+			lastScrollTop = windowScrollTop;
+		};
+
+		/**
 		 * [bindScrollingEvent description]
 		 * @return {[type]} [description]
 		 */
 
-		var bindScrollingEvent = function() {
+		var bindWheelHandeler = function() {
 			$(w).bind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
+		};
+
+		/**
+		 * [unbindWheelHandeler description]
+		 * @return {[type]} [description]
+		 */
+
+		var unbindWheelHandeler = function() {
+			$(w).unbind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll' );
+		}
+
+		/**
+		 * [bindScrollHandeler description]
+		 * @return {[type]} [description]
+		 */
+
+		var bindScrollHandeler = function() {
+			$(w).bind( 'scroll', scrollHandeler );
+		};
+
+		/**
+		 * [bindScrollHandeler description]
+		 * @return {[type]} [description]
+		 */
+
+		var unbindScrollHandeler = function() {
+			$(w).unbind( 'scroll' );
 		};
 
 		/**
@@ -248,6 +315,10 @@
 		 */
 
 		var bindTouchSwipe = function() {
+
+			// $(w).scroll(function(e){
+			// 	console.log(e);
+			// });
 
 			var startY = null;
 
@@ -315,7 +386,15 @@
 
 			$(w).on( "touchmove", function(ev) {
 				if( activeFSVS = anyActiveFSVS() ) {
-	    			if( isDraggingUp(ev) ) {
+					if( activeFSVS.fsvs.isFirstSlide() && isDraggingDown( ev ) ) {
+						ev.preventDefault();
+						bindScrollHandeler();
+						activeFSVS.fsvs.unjackScreen();
+					} else if( activeFSVS.fsvs.isLastSlide() && isDraggingUp( ev ) ) {
+						ev.preventDefault();
+						bindScrollHandeler();
+						activeFSVS.fsvs.unjackScreen();
+					} else if( isDraggingUp(ev) ) {
 						activeFSVS.fsvs.slideUp();
 					} else if( isDraggingDown(ev) ) {
 						activeFSVS.fsvs.slideDown();
@@ -644,7 +723,8 @@
 
 		};
 
-		bindScrollingEvent();
+		bindScrollHandeler();
+		//bindWheelHandeler();
 		bindKeyArrows();
 		bindTouchSwipe();
 
