@@ -25,14 +25,14 @@
 
 		var options = $.extend({
 			speed 				: 500,
-	        mouseSwipeDisance 	: 40,
-	        mouseWheelDelay 	: false,
-	        mouseDragEvents 	: true,
-	        touchEvents 		: true,
-	        arrowKeyEvents 		: true,
-	        pagination 			: true,
-	        nthClasses 			: 5,
-	        detectHash 			: true
+			mouseSwipeDisance 	: 40,
+			mouseWheelDelay 	: false,
+			mouseDragEvents 	: true,
+			touchEvents 		: true,
+			arrowKeyEvents 		: true,
+			pagination 			: true,
+			nthClasses 			: 5,
+			detectHash 			: true
 		}, _options );
 
 		/**
@@ -142,6 +142,25 @@
 		};
 
 		/**
+		 * [bindKeyArrows description]
+		 * @return {[type]} [description]
+		 */
+
+		var bindKeyArrows = function() {
+			window.onkeydown = function(e) {
+				if( activeFSVS = anyActiveFSVS() ) {
+					e = e || window.event;
+				    if ( e.keyCode == '38' ) {
+				        activeFSVS.fsvs.slideDown();
+				    }
+				    else if ( e.keyCode == '40' ) {
+						activeFSVS.fsvs.slideUp();
+				    }
+				}
+			}
+		};
+
+		/**
 		 * [customScrollHandeler description]
 		 * @param  {[type]}   e        [description]
 		 * @param  {Function} callback [description]
@@ -160,6 +179,41 @@
 			}, 10 );
 		};
 
+		var doTheFunkyStuff = function( wheely, event ) {
+
+			windowScrollTop = $(w).scrollTop();
+			if( activeFSVS = anyActiveFSVS() ) {
+				fsvsClass = activeFSVS.fsvs;
+				fsvsClass.setOffset();
+				if( ! fsvsClass.isAnimated() && wheely > 1 ) {
+					if( fsvsClass.isFirstSlide() && ! scrollingDown( event ) ) {
+						event.preventDefault();
+						fsvsClass.unjackScreen();
+					} else if( fsvsClass.isLastSlide() && scrollingDown( event ) ) {
+						event.preventDefault();
+						fsvsClass.unjackScreen();
+					} else if( scrollingDown( event ) ) {
+						fsvsClass.slideUp();
+					} else {
+						fsvsClass.slideDown();
+					}
+				}
+			} else {
+				for( var i in fsvsObjects ) {
+					var fsvs = fsvsObjects[i];
+					var fsvsClass = fsvs.fsvs;
+					fsvsClass.setOffset();
+					if( ! fsvsClass.isAnimated() ) {
+						if( fsvsClass.isFirstSlide() && fsvsClass.enteredViewPortFromAbove( event ) ) {
+							fsvsClass.hijackScreen();
+						} else if( fsvsClass.isLastSlide() && fsvsClass.enteredViewPortFromBelow( event ) ) {
+							fsvsClass.hijackScreen();
+						}
+					}
+				}
+			}
+		};
+
 		/**
 		 * [mouseWheelHandler description]
 		 * @param  {[type]} e [description]
@@ -173,39 +227,7 @@
 				customScrollHandeler( function(){
 
 					var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
-					windowScrollTop = $(w).scrollTop();
-
-					if( activeFSVS = anyActiveFSVS() ) {
-						fsvsClass = activeFSVS.fsvs;
-						fsvsClass.setOffset();
-						if( ! fsvsClass.isAnimated() && wheely > 1 ) {
-							if( fsvsClass.isFirstSlide() && ! scrollingDown( wheelEvent ) ) {
-								wheelEvent.preventDefault();
-								fsvsClass.unjackScreen();
-							} else if( fsvsClass.isLastSlide() && scrollingDown( wheelEvent ) ) {
-								wheelEvent.preventDefault();
-								fsvsClass.unjackScreen();
-							} else if( scrollingDown( wheelEvent ) ) {
-								fsvsClass.slideUp();
-							} else {
-								fsvsClass.slideDown();
-							}
-						}
-					} else {
-						for( var i in fsvsObjects ) {
-							var fsvs = fsvsObjects[i];
-							var fsvsClass = fsvs.fsvs;
-							fsvsClass.setOffset();
-							if( ! fsvsClass.isAnimated() ) {
-								if( fsvsClass.isFirstSlide() && fsvsClass.enteredViewPortFromAbove( wheelEvent ) ) {
-									fsvsClass.hijackScreen();
-								} else if( fsvsClass.isLastSlide() && fsvsClass.enteredViewPortFromBelow( wheelEvent ) ) {
-									console.log('a');
-									fsvsClass.hijackScreen();
-								}
-							}
-						}
-					}
+					doTheFunkyStuff( wheely, wheelEvent );
 
 				});
 			}
@@ -218,6 +240,88 @@
 
 		var bindScrollingEvent = function() {
 			$(w).bind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
+		};
+
+		/**
+		 * [bindTouchSwipe description]
+		 * @return {[type]} [description]
+		 */
+
+		var bindTouchSwipe = function() {
+
+			var startY = null;
+
+			/**
+			 * [isDraggingUp description]
+			 * @param  {[type]}  ev [description]
+			 * @return {Boolean}    [description]
+			 */
+
+			var isDraggingUp = function(ev) {
+				var e = ev.originalEvent;
+				if( startY !== null ) {
+					var touches = e.touches;
+					if( touches && touches.length ) {
+						var deltaY = startY - touches[0].pageY;
+						if ( deltaY >= options.mouseSwipeDisance ) {
+							startY = null;
+							return true;
+						}
+					}
+				}
+				return false;
+			};
+
+			/**
+			 * [isDraggingDown description]
+			 * @param  {[type]}  ev [description]
+			 * @return {Boolean}    [description]
+			 */
+
+			var isDraggingDown = function(ev) {
+				var e = ev.originalEvent;
+				if( startY !== null ) {
+					var touches = e.touches;
+					if( touches && touches.length ) {
+						var deltaY = startY - touches[0].pageY;
+						if ( deltaY <= ( options.mouseSwipeDisance * -1 ) ) {
+							startY = null;
+							return true;
+						}
+					}
+				}
+				return false;
+			};
+
+			/**
+			 * [description]
+			 * @param  {[type]} ev [description]
+			 * @return {[type]}    [description]
+			 */
+
+			$(w).on( "touchstart", function(ev) {
+    			var e = ev.originalEvent;
+				if( e.target.nodeName.toLowerCase() !== 'a' ) {
+					var touches = e.touches;
+					if( touches && touches.length ) startY = touches[0].pageY;
+				}
+			});
+
+			/**
+			 * [description]
+			 * @param  {[type]} ev [description]
+			 * @return {[type]}    [description]
+			 */
+
+			$(w).on( "touchmove", function(ev) {
+				if( activeFSVS = anyActiveFSVS() ) {
+	    			if( isDraggingUp(ev) ) {
+						activeFSVS.fsvs.slideUp();
+					} else if( isDraggingDown(ev) ) {
+						activeFSVS.fsvs.slideDown();
+					}
+				}
+			});
 		};
 
 		/**
@@ -541,6 +645,8 @@
 		};
 
 		bindScrollingEvent();
+		bindKeyArrows();
+		bindTouchSwipe();
 
 		return $(this).each( function(){
 			this.fsvs = new fsvsApp( this );
