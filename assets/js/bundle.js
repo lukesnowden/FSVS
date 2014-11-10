@@ -235,10 +235,8 @@
 			handelerStart = Date.now();
 			if( ! isCustomScrollHandelerActive ) {
 				customScrollHandeler( function(){
-
 					var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
 					doTheFunkyStuff( wheely, wheelEvent );
-
 				});
 			}
 		};
@@ -279,7 +277,7 @@
 		 */
 
 		var bindWheelHandeler = function() {
-			$(w).bind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll', mouseWheelHandler );
+			$(w).bind( 'wheel.fsvs mousewheel.fsvs DOMMouseScroll.fsvs MozMousePixelScroll.fsvs', mouseWheelHandler );
 		};
 
 		/**
@@ -288,7 +286,7 @@
 		 */
 
 		var unbindWheelHandeler = function() {
-			$(w).unbind( 'wheel mousewheel DOMMouseScroll MozMousePixelScroll' );
+			$(w).unbind( 'wheel.fsvs mousewheel.fsvs DOMMouseScroll.fsvs MozMousePixelScroll.fsvs' );
 		}
 
 		/**
@@ -297,7 +295,7 @@
 		 */
 
 		var bindScrollHandeler = function() {
-			$(w).bind( 'scroll', scrollHandeler );
+			$(w).bind( 'scroll.fsvs', scrollHandeler );
 		};
 
 		/**
@@ -306,7 +304,7 @@
 		 */
 
 		var unbindScrollHandeler = function() {
-			$(w).unbind( 'scroll' );
+			$(w).unbind( 'scroll.fsvs' );
 		};
 
 		/**
@@ -370,7 +368,7 @@
 			 * @return {[type]}    [description]
 			 */
 
-			$(w).on( "touchstart", function(ev) {
+			$(w).on( "touchstart.fsvs", function(ev) {
     			var e = ev.originalEvent;
 				if( e.target.nodeName.toLowerCase() !== 'a' ) {
 					var touches = e.touches;
@@ -384,21 +382,23 @@
 			 * @return {[type]}    [description]
 			 */
 
-			$(w).on( "touchmove", function(ev) {
+			$(w).on( "touchmove.fsvs", function(ev) {
 				if( activeFSVS = anyActiveFSVS() ) {
+					ev.preventDefault();
 					if( activeFSVS.fsvs.isFirstSlide() && isDraggingDown( ev ) ) {
-						ev.preventDefault();
 						bindScrollHandeler();
 						activeFSVS.fsvs.unjackScreen();
 					} else if( activeFSVS.fsvs.isLastSlide() && isDraggingUp( ev ) ) {
-						ev.preventDefault();
 						bindScrollHandeler();
 						activeFSVS.fsvs.unjackScreen();
-					} else if( isDraggingUp(ev) ) {
+					} else
+					if( isDraggingUp(ev) ) {
 						activeFSVS.fsvs.slideUp();
 					} else if( isDraggingDown(ev) ) {
 						activeFSVS.fsvs.slideDown();
 					}
+				} else {
+					//scrollHandeler(ev);
 				}
 			});
 		};
@@ -458,16 +458,6 @@
 			 */
 
 			var activated = false;
-
-			/**
-			 * [unjackScreen description]
-			 * @return {[type]}           [description]
-			 */
-
-			this.unjackScreen = function() {
-				$('html').removeClass( 'hijacked' );
-				activated = false;
-			};
 
 			/**
 			 * [setOffset description]
@@ -589,6 +579,18 @@
 			};
 
 			/**
+			 * [unjackScreen description]
+			 * @return {[type]}           [description]
+			 */
+
+			this.unjackScreen = function() {
+				$('html').removeClass( 'hijacked' );
+				jqElm.removeClass('active');
+				activated = false;
+			};
+
+
+			/**
 			 * [hijackScreen description]
 			 * @return {[type]} [description]
 			 */
@@ -596,6 +598,7 @@
 			this.hijackScreen = function() {
 				$("html, body").scrollTop( jqElmOffset.top );
 				$('html').addClass( 'hijacked' );
+				jqElm.addClass('active');
 				activated = true;
 			};
 

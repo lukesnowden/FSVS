@@ -8,18 +8,31 @@
 // ------------------------------------------------ \
 
 // generic
-$green: 		#1abc9c!default;		$dk-green: 		#16a085!default;
-$emerald: 	#2ecc71!default;		$dk-emerald: 	#27ae60!default;
-$blue: 			#3498db!default;		$dk-blue: 		#2980b9!default;
-$navy: 			#34495e!default;		$dk-navy: 		#2c3e50!default;
-$purple: 		#9b59b6!default;		$dk-purple: 	#8e44ad!default;
-$yellow: 		#f1c40f!default;		$dk-yellow: 	#f39c12!default;
-$orange: 		#e67e22!default;		$dk-orange: 	#d35400!default;
-$red: 			#e74c3c!default;		$dk-red: 			#c0392b!default;
-$lt-grey: 	#ecf0f1!default;		$grey: 				#bdc3c7!default;
-$med-grey: 	#808080!default;		$dk-grey: 		#7f8c8d!default;
-$off-white: #fafafa!default;		$off-black: 	#465563!default;
-$light: 		#e2e2e2!default;		$dark: 				#252525!default;
+$green: 		#1abc9c!default;
+$dk-green: 		#16a085!default;
+$emerald: 		#2ecc71!default;
+$dk-emerald: 	#27ae60!default;
+$blue: 			#3498db!default;
+$dk-blue: 		#2980b9!default;
+$navy: 			#34495e!default;
+$dk-navy: 		#2c3e50!default;
+$purple: 		#9b59b6!default;
+$dk-purple: 	#8e44ad!default;
+$yellow: 		#f1c40f!default;
+$dk-yellow: 	#f39c12!default;
+$orange: 		#eb7347!default;
+
+$dk-orange: 	#d35400!default;
+$red: 			#e74c3c!default;
+$dk-red: 		#c0392b!default;
+$lt-grey: 		#ecf0f1!default;
+$grey: 			#bdc3c7!default;
+$med-grey: 		#808080!default;
+$dk-grey: 		#7f8c8d!default;
+$off-white: 	#fafafa!default;
+$off-black: 	#465563!default;
+$light: 		#e2e2e2!default;
+$dark: 			#252525!default;
 
 // brand
 $brand: 		#f06060!default;
@@ -42,7 +55,7 @@ $base-font-color: 			$med-grey!default;
 $base-background-color: #fff!default;
 
 // font stacks
-$sans-serif: 	Arial, sans-serif!default;
+$sans-serif: 		'Open Sans', sans-serif !default;
 $serif: 			Georgia, Times, "Times New Roman", serif!default;
 
 // headings

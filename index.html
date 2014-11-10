@@ -4,17 +4,23 @@
 		<meta charset="UTF-8">
 		<title>FSVS</title>
 		<meta name="description" content="FSVS" />
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="./assets/css/style.css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 		<script src="./assets/js/bundle.js"></script>
+		<script>
+		jQuery(document).ready(function($){
+			$('.block').height($(window).height());
+			$(window).scroll(function(){ var t = $(window).scrollTop(), n = t/2; $("h1").css({ transform : "translateY("+n+"px)" });});
+		});
+		</script>
 	</head>
 	<body>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
+		<div class="block welcome">
+			<h1>FSVS<sup>2</sup></h1>
+		</div>
 		<div id="fsvs1" class="fsvs">
 			<div>
 				<div>1</div>
@@ -22,11 +28,13 @@
 				<div>3</div>
 			</div>
 		</div>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
+		<div class="block">
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+		</div>
 		<div id="fsvs2" class="fsvs">
 			<div>
 				<div>1</div>
@@ -34,11 +42,13 @@
 				<div>3</div>
 			</div>
 		</div>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
-		<p>dfdsfdsfdfds</p>
+		<div class="block">
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+			<p>dfdsfdsfdfds</p>
+		</div>
 	</body>
 
 	<script type="text/javascript">
