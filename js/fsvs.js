@@ -31,6 +31,7 @@
 			touchEvents 		: true,
 			arrowKeyEvents 		: true,
 			pagination 			: true,
+			paginationTemplate	: '<li data-slide-index="[%num%]"><span></span></li>',
 			nthClasses 			: 5,
 			detectHash 			: true
 		}, _options );
@@ -210,11 +211,13 @@
 						bindScrollHandeler();
 						unbindWheelHandeler();
 						fsvsClass.unjackScreen();
+						fsvsClass.hidePagination();
 					} else if( fsvsClass.isLastSlide() && scrollingDown( event ) ) {
 						event.preventDefault();
 						bindScrollHandeler();
 						unbindWheelHandeler();
 						fsvsClass.unjackScreen();
+						fsvsClass.hidePagination();
 					} else if( scrollingDown( event ) ) {
 						fsvsClass.slideUp();
 					} else {
@@ -257,10 +260,12 @@
 					fsvsClass.setOffset();
 					if( ! fsvsClass.isAnimated() ) {
 						if( fsvsClass.isFirstSlide() && fsvsClass.enteredViewPortFromAbove( event ) ) {
+							fsvsClass.showPagination();
 							fsvsClass.hijackScreen();
 							unbindScrollHandeler();
 							bindWheelHandeler();
 						} else if( fsvsClass.isLastSlide() && fsvsClass.enteredViewPortFromBelow( event ) ) {
+							fsvsClass.showPagination();
 							fsvsClass.hijackScreen();
 							unbindScrollHandeler();
 							bindWheelHandeler();
@@ -411,6 +416,13 @@
 		var fsvsApp = function( elm ) {
 
 			/**
+			 * [that description]
+			 * @type {[type]}
+			 */
+
+			var that = this;
+
+			/**
 			 * [jqElm description]
 			 * @type {[type]}
 			 */
@@ -444,6 +456,13 @@
 			 */
 
 			var jqElmOffset = 0;
+
+			/**
+			 * [fsvsPagination description]
+			 * @type {[type]}
+			 */
+
+			var fsvsPagination = null;
 
 			/**
 			 * [animated description]
@@ -496,11 +515,30 @@
 			 */
 
 			this.slideToIndex = function( index ) {
+				changePagination( index );
 				if( isYoungAndHip() ) {
 					cssSlide( index );
 				} else {
 					animateSlide( index );
 				}
+			};
+
+			/**
+			 * [showPagination description]
+			 * @return {[type]} [description]
+			 */
+
+			this.showPagination = function() {
+				fsvsPagination.addClass('visible');
+			};
+
+			/**
+			 * [hidePagination description]
+			 * @return {[type]} [description]
+			 */
+
+			this.hidePagination = function() {
+				fsvsPagination.removeClass('visible');
 			};
 
 			/**
@@ -600,6 +638,39 @@
 				$('html').addClass( 'hijacked' );
 				jqElm.addClass('active');
 				activated = true;
+			};
+
+			/**
+			 * [changePagination description]
+			 * @param  {[type]} index [description]
+			 * @return {[type]}       [description]
+			 */
+
+			var changePagination = function( index ) {
+				$('.active', fsvsPagination).removeClass('active');
+				$('> *', fsvsPagination).eq( index ).addClass('active');
+			};
+
+			/**
+			 * [pagination description]
+			 * @return {[type]} [description]
+			 */
+
+			var pagination = function() {
+				fsvsPagination = $('<ul class="fsvs-pagination"></ul>');
+				$( '> div > div', jqElm ).each( function(i){
+					var temp = options.paginationTemplate.replace( /\[%num%\]/g, (i+1) );
+					var link = $(temp).addClass( i === 0 ? 'active' : '' );
+					link.appendTo( fsvsPagination );
+					link.on( 'click.fsvs', { index : i }, function(e){
+						e.preventDefault();
+						that.slideToIndex( e.data.index );
+					});
+				});
+				fsvsPagination.insertAfter( jqElm );
+				fsvsPagination.css({
+					'margin-top' : '-' + (fsvsPagination.height()/2) + 'px'
+				});
 			};
 
 			/**
@@ -722,6 +793,8 @@
 
 			setDimentions();
 			setSpeed( options.speed );
+			if( options.nthClasses ) nthClasses( options.nthClasses );
+			if( options.pagination ) pagination();
 			$(w).resize( setDimentions );
 
 		};

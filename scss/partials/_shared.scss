@@ -15,3 +15,37 @@
 		text-transform: uppercase;
 	}
 }
+
+.block2 {
+	background: url( /FSVS/images/background-01.jpg) no-repeat center center;
+  	background-size: cover;
+}
+
+.block3 {
+	background: url( /FSVS/images/background-02.jpg) no-repeat center center;
+  	background-size: cover;
+}
+
+#fsvs1 {
+	.nth-class-1 {
+		background: $orange;
+	}
+	.nth-class-2 {
+		background: #285e5e;
+	}
+	.nth-class-3 {
+		background: #bc303a;
+	}
+}
+
+#fsvs2 {
+	.nth-class-1 {
+		background: #bc303a;
+	}
+	.nth-class-2 {
+		background: #285e5e;
+	}
+	.nth-class-3 {
+		background: $orange;
+	}
+}

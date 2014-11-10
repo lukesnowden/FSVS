@@ -484,6 +484,28 @@ select {
     padding: 200px 0 0 0;
     text-transform: uppercase; }
 
+.block2 {
+  background: url(/FSVS/images/background-01.jpg) no-repeat center center;
+  background-size: cover; }
+
+.block3 {
+  background: url(/FSVS/images/background-02.jpg) no-repeat center center;
+  background-size: cover; }
+
+#fsvs1 .nth-class-1 {
+  background: #eb7347; }
+#fsvs1 .nth-class-2 {
+  background: #285e5e; }
+#fsvs1 .nth-class-3 {
+  background: #bc303a; }
+
+#fsvs2 .nth-class-1 {
+  background: #bc303a; }
+#fsvs2 .nth-class-2 {
+  background: #285e5e; }
+#fsvs2 .nth-class-3 {
+  background: #eb7347; }
+
 html.hijacked {
   overflow: hidden; }
 
@@ -493,7 +515,8 @@ html.hijacked {
   .fsvs > div {
     position: absolute;
     top: 0;
-    left: 0; }
+    left: 0;
+    z-index: 9; }
     .fsvs > div > div {
       height: 100%;
       background: red; }
@@ -503,3 +526,39 @@ html.hijacked {
         background: green; }
       .fsvs > div > div:nth-child(4) {
         background: yellow; }
+  .fsvs + .fsvs-pagination {
+    -webkit-transition: all 0.4s;
+            transition: all 0.4s;
+    position: fixed;
+    z-index: 999;
+    left: 100%;
+    top: 50%;
+    margin: 0 0 0 -40px;
+    padding: 0 0 0 50px;
+    background: none; }
+    .fsvs + .fsvs-pagination li {
+      -webkit-transition: all 0.4s;
+              transition: all 0.4s;
+      border-radius: 100%;
+      list-style: none;
+      display: block;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      border: 1px solid #404040;
+      margin: 0 0 4px 0; }
+      .fsvs + .fsvs-pagination li span {
+        display: block;
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        border: 1px solid #404040;
+        margin: 3px auto; }
+      .fsvs + .fsvs-pagination li.active {
+        border: 1px dashed #ffffff; }
+        .fsvs + .fsvs-pagination li.active span {
+          background: #fff; }
+    .fsvs + .fsvs-pagination.visible {
+      padding: 0;
+      z-index: 9991; }
