@@ -1,0 +1,17 @@
+//
+//	Shared common styles
+// ------------------------------------------------ \
+
+
+.block {
+	background: black;
+	h1 {
+		text-shadow: 0px 1px 60px #fff;
+		color: $orange;
+		text-align: center;
+		font-size: 60px;
+		font-weight: bold;
+		padding: 200px 0 0 0;
+		text-transform: uppercase;
+	}
+}
