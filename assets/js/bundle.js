@@ -686,40 +686,6 @@
 			 */
 
 			var pixelTick = function( index, currentIndex ) {
-				// var frequency = 1;
-				// var loop = 0;
-				// var loops = 1;
-				// var percentage = 0;
-				// var now = Date.now();
-				// var interval = setInterval( function(){
-
-				// 	var ev = $.Event( 'pixelTick.fsvs' );
-				// 	loop = Number(Date.now()-now);
-				// 	percentage = (loop/(options.speed/100)).toFixed(0);
-				// 	ev.transitionSpeed = Number(((options.speed/height)/100));
-				// 	ev.slideIndex = index;
-				// 	ev.slideFrom = $('> div > div', jqElm).eq(currentIndex);
-				// 	ev.slideTo = $('> div > div', jqElm).eq(index);
-				// 	ev.slidingDown = index > currentIndex;
-				// 	ev.slidingUp = ! ev.slidingDown;
-
-				// 	ev.percentageIn = percentage;
-				// 	ev.heightPixelsIn = Number(((height/100)*percentage));
-				// 	ev.widthPixelsIn = Number((($(window).width()/100)*percentage));
-				// 	ev.opacityIn = Number((percentage/100));
-
-				// 	ev.percentageOut = 100-percentage;
-				// 	ev.heightPixelsOut = height-ev.heightPixelsIn;
-				// 	ev.widthPixelsOut = $(window).width()-ev.widthPixelsIn;
-				// 	ev.opacityOut = 1-ev.opacityIn;
-
-				// 	if( percentage >= 100 ) {
-				// 		console.log(loops);
-				// 		clearInterval( interval );
-				// 	}
-				// 	loops++;
-				// 	jqElm.trigger( ev );
-				// }, options.speed/height );
 
 				if( window.requestId ) cancelAnimationFrame( window.requestId );
 				var startTime = new Date().getTime();
