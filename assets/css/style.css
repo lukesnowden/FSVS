@@ -489,32 +489,32 @@ select {
   background-size: cover; }
 
 .contents {
-  margin: 50px 50px;
+  margin: 80px 100px;
   padding: 30px; }
 
+#fsvs1 p, #fsvs1 h2 {
+  color: black; }
 #fsvs1 .nth-class-1 {
-  background: #eb7347; }
-  #fsvs1 .nth-class-1 h2 {
-    text-align: center;
-    font-size: 40px;
-    padding-top: 100px; }
+  background: black; }
   #fsvs1 .nth-class-1 .contents {
     background: #e96230; }
 #fsvs1 .nth-class-2 {
-  background: #285e5e; }
+  background: black; }
   #fsvs1 .nth-class-2 .contents {
     background: #204c4c; }
 #fsvs1 .nth-class-3 {
-  background: #bc303a; }
+  background: black; }
   #fsvs1 .nth-class-3 .contents {
     background: #a82b34; }
 
+#fsvs2 p, #fsvs2 h2 {
+  color: black; }
 #fsvs2 .nth-class-1 {
-  background: #bc303a; }
+  background: #DB0A5B; }
 #fsvs2 .nth-class-2 {
-  background: #285e5e; }
+  background: #F64747; }
 #fsvs2 .nth-class-3 {
-  background: #eb7347; }
+  background: #F62459; }
 
 html.hijacked {
   overflow: hidden; }

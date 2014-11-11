@@ -27,30 +27,28 @@
 }
 
 .contents {
-	margin: 50px 50px;
+	margin: 80px 100px;
 	padding: 30px;
 }
 
 #fsvs1 {
+	p, h2 {
+		color: black;
+	}
 	.nth-class-1 {
-		background: $orange;
-		h2 {
-			text-align: center;
-			font-size: 40px;
-			padding-top: 100px;
-		}
+		background: black;
 		.contents {
 			background: darken( $orange, 5% );
 		}
 	}
 	.nth-class-2 {
-		background: #285e5e;
+		background: black;
 		.contents {
 			background: darken( #285e5e, 5% );
 		}
 	}
 	.nth-class-3 {
-		background: #bc303a;
+		background: black;
 		.contents {
 			background: darken( #bc303a, 5% );
 		}
@@ -58,13 +56,17 @@
 }
 
 #fsvs2 {
+	p, h2 {
+		color: black;
+	}
 	.nth-class-1 {
-		background: #bc303a;
+		background: #DB0A5B;
 	}
 	.nth-class-2 {
-		background: #285e5e;
+		background: #F64747;
 	}
 	.nth-class-3 {
-		background: $orange;
+		background: #F62459;
 	}
 }
+

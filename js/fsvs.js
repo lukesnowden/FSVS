@@ -451,6 +451,13 @@
 			var height = 0;
 
 			/**
+			 * [width description]
+			 * @type {Number}
+			 */
+
+			var width = 0;
+
+			/**
 			 * [jqElmOffset description]
 			 * @type {Number}
 			 */
@@ -679,38 +686,80 @@
 			 */
 
 			var pixelTick = function( index, currentIndex ) {
-				var frequency = 1;
-				var loop = 0;
-				var percentage = 0;
-				var now = Date.now();
-				var interval = setInterval( function(){
+				// var frequency = 1;
+				// var loop = 0;
+				// var loops = 1;
+				// var percentage = 0;
+				// var now = Date.now();
+				// var interval = setInterval( function(){
 
+				// 	var ev = $.Event( 'pixelTick.fsvs' );
+				// 	loop = Number(Date.now()-now);
+				// 	percentage = (loop/(options.speed/100)).toFixed(0);
+				// 	ev.transitionSpeed = Number(((options.speed/height)/100));
+				// 	ev.slideIndex = index;
+				// 	ev.slideFrom = $('> div > div', jqElm).eq(currentIndex);
+				// 	ev.slideTo = $('> div > div', jqElm).eq(index);
+				// 	ev.slidingDown = index > currentIndex;
+				// 	ev.slidingUp = ! ev.slidingDown;
+
+				// 	ev.percentageIn = percentage;
+				// 	ev.heightPixelsIn = Number(((height/100)*percentage));
+				// 	ev.widthPixelsIn = Number((($(window).width()/100)*percentage));
+				// 	ev.opacityIn = Number((percentage/100));
+
+				// 	ev.percentageOut = 100-percentage;
+				// 	ev.heightPixelsOut = height-ev.heightPixelsIn;
+				// 	ev.widthPixelsOut = $(window).width()-ev.widthPixelsIn;
+				// 	ev.opacityOut = 1-ev.opacityIn;
+
+				// 	if( percentage >= 100 ) {
+				// 		console.log(loops);
+				// 		clearInterval( interval );
+				// 	}
+				// 	loops++;
+				// 	jqElm.trigger( ev );
+				// }, options.speed/height );
+
+				if( window.requestId ) cancelAnimationFrame( window.requestId );
+				var startTime = new Date().getTime();
+				var last = startTime;
+
+				function tick() {
+
+					window.requestId = requestAnimationFrame( tick );
+					var now = new Date().getTime();
+					var runtime = now-startTime;
+					if( runtime > options.speed ) runtime = options.speed;
+					var percentage = runtime/(options.speed/100);
+					var dt = now-last;
 					var ev = $.Event( 'pixelTick.fsvs' );
-					loop = Number(Date.now()-now);
-					percentage = (loop/(options.speed/100)).toFixed(0);
-					ev.transitionSpeed = Number(((options.speed/height)/100));
+
+					last = now;
+
+					ev.transitionSpeed = dt/100;
 					ev.slideIndex = index;
 					ev.slideFrom = $('> div > div', jqElm).eq(currentIndex);
 					ev.slideTo = $('> div > div', jqElm).eq(index);
 					ev.slidingDown = index > currentIndex;
 					ev.slidingUp = ! ev.slidingDown;
 
-					ev.percentageIn = percentage;
-					ev.heightPixelsIn = Number(((height/100)*percentage));
-					ev.widthPixelsIn = Number((($(window).width()/100)*percentage));
-					ev.opacityIn = Number((percentage/100));
+					ev.percentageIn 	= percentage;
+					ev.heightPixelsIn	= (height/100)*percentage;
+					ev.widthPixelsIn 	= (width/100)*percentage;
+					ev.opacityIn 		= (percentage/100);
 
-					ev.percentageOut = 100-percentage;
-					ev.heightPixelsOut = height-ev.heightPixelsIn;
-					ev.widthPixelsOut = $(window).width()-ev.widthPixelsIn;
-					ev.opacityOut = 1-ev.opacityIn;
-
-					if( percentage >= 100 ) {
-						clearInterval( interval );
-					}
+					ev.percentageOut 	= 100-percentage;
+					ev.heightPixelsOut 	= height-ev.heightPixelsIn;
+					ev.widthPixelsOut 	= width-ev.widthPixelsIn;
+					ev.opacityOut 		= 1-ev.opacityIn;
 
 					jqElm.trigger( ev );
-				}, options.speed/height );
+
+			    	if( runtime == options.speed  ) cancelAnimationFrame( window.requestId );
+
+				}
+				tick();
 			};
 
 			/**
@@ -773,7 +822,7 @@
 			 */
 
 			var setDimentions = function() {
-				var width = $(w).width();
+				width = $(w).width();
 				height = $(w).height();
 				jqElm.width( width ).height( height );
 				$( '> div > div', jqElm ).width( width ).height( height );
