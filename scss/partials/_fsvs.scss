@@ -14,16 +14,7 @@ html.hijacked {
 		z-index: 9;
 		> div {
 			height: 100%;
-			background: red;
-			&:nth-child( 2 ) {
-				background: blue;
-			}
-			&:nth-child( 3 ) {
-				background: green;
-			}
-			&:nth-child( 4 ) {
-				background: yellow;
-			}
+			overflow: hidden;
 		}
 	}
 	&+ .fsvs-pagination {

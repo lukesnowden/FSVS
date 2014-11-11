@@ -208,10 +208,6 @@ ul, ol, dd {
     display: table;
     clear: both; }
 
-* {
-  background: rgba(0, 0, 0, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#10000000, endColorstr=#10000000); }
-
 .container {
   width: auto;
   max-width: 100%;
@@ -492,12 +488,26 @@ select {
   background: url(/FSVS/images/background-02.jpg) no-repeat center center;
   background-size: cover; }
 
+.contents {
+  margin: 50px 50px;
+  padding: 30px; }
+
 #fsvs1 .nth-class-1 {
   background: #eb7347; }
+  #fsvs1 .nth-class-1 h2 {
+    text-align: center;
+    font-size: 40px;
+    padding-top: 100px; }
+  #fsvs1 .nth-class-1 .contents {
+    background: #e96230; }
 #fsvs1 .nth-class-2 {
   background: #285e5e; }
+  #fsvs1 .nth-class-2 .contents {
+    background: #204c4c; }
 #fsvs1 .nth-class-3 {
   background: #bc303a; }
+  #fsvs1 .nth-class-3 .contents {
+    background: #a82b34; }
 
 #fsvs2 .nth-class-1 {
   background: #bc303a; }
@@ -519,13 +529,7 @@ html.hijacked {
     z-index: 9; }
     .fsvs > div > div {
       height: 100%;
-      background: red; }
-      .fsvs > div > div:nth-child(2) {
-        background: blue; }
-      .fsvs > div > div:nth-child(3) {
-        background: green; }
-      .fsvs > div > div:nth-child(4) {
-        background: yellow; }
+      overflow: hidden; }
   .fsvs + .fsvs-pagination {
     -webkit-transition: all 0.4s;
             transition: all 0.4s;

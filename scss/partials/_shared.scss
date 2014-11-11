@@ -26,15 +26,34 @@
   	background-size: cover;
 }
 
+.contents {
+	margin: 50px 50px;
+	padding: 30px;
+}
+
 #fsvs1 {
 	.nth-class-1 {
 		background: $orange;
+		h2 {
+			text-align: center;
+			font-size: 40px;
+			padding-top: 100px;
+		}
+		.contents {
+			background: darken( $orange, 5% );
+		}
 	}
 	.nth-class-2 {
 		background: #285e5e;
+		.contents {
+			background: darken( #285e5e, 5% );
+		}
 	}
 	.nth-class-3 {
 		background: #bc303a;
+		.contents {
+			background: darken( #bc303a, 5% );
+		}
 	}
 }
 

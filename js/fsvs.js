@@ -24,7 +24,7 @@
 		 */
 
 		var options = $.extend({
-			speed 				: 500,
+			speed 				: 1000,
 			mouseSwipeDisance 	: 40,
 			mouseWheelDelay 	: false,
 			mouseDragEvents 	: true,
@@ -674,13 +674,55 @@
 			};
 
 			/**
+			 * [pixelTick description]
+			 * @return {[type]} [description]
+			 */
+
+			var pixelTick = function( index, currentIndex ) {
+				var frequency = 1;
+				var loop = 0;
+				var percentage = 0;
+				var now = Date.now();
+				var interval = setInterval( function(){
+
+					var ev = $.Event( 'pixelTick.fsvs' );
+					loop = Number(Date.now()-now);
+					percentage = (loop/(options.speed/100)).toFixed(0);
+					ev.transitionSpeed = Number(((options.speed/height)/100));
+					ev.slideIndex = index;
+					ev.slideFrom = $('> div > div', jqElm).eq(currentIndex);
+					ev.slideTo = $('> div > div', jqElm).eq(index);
+					ev.slidingDown = index > currentIndex;
+					ev.slidingUp = ! ev.slidingDown;
+
+					ev.percentageIn = percentage;
+					ev.heightPixelsIn = Number(((height/100)*percentage));
+					ev.widthPixelsIn = Number((($(window).width()/100)*percentage));
+					ev.opacityIn = Number((percentage/100));
+
+					ev.percentageOut = 100-percentage;
+					ev.heightPixelsOut = height-ev.heightPixelsIn;
+					ev.widthPixelsOut = $(window).width()-ev.widthPixelsIn;
+					ev.opacityOut = 1-ev.opacityIn;
+
+					if( percentage >= 100 ) {
+						clearInterval( interval );
+					}
+
+					jqElm.trigger( ev );
+				}, options.speed/height );
+			};
+
+			/**
 			 * [beforeSlide description]
 			 * @param  {[type]} index [description]
 			 * @return {[type]}       [description]
 			 */
 
 			var beforeSlide = function( index ) {
-
+				var ev = $.Event( 'beforeSlide.fsvs' );
+				ev.slideIndex = index;
+				jqElm.trigger( ev );
 			};
 
 			/**
@@ -690,7 +732,9 @@
 			 */
 
 			var afterSlide = function( index ) {
-
+				var ev = $.Event( 'afterSlide.fsvs' );
+				ev.slideIndex = index;
+				jqElm.trigger( ev );
 			};
 
 			/**
@@ -760,11 +804,12 @@
 				if( animated ) return;
 				animated = true;
 				beforeSlide( index );
+				pixelTick( index, currentSlideIndex );
 				$( '> div', jqElm ).css({
 					'-webkit-transform' : 'translate3d(0, -' + (index*height) + 'px, 0)',
-					'-moz-transform' : 'translate3d(0, -' + (index*height) + 'px, 0)',
-					'-ms-transform' : 'translate3d(0, -' + (index*height) + 'px, 0)',
-					'transform' : 'translate3d(0, -' + (index*height) + 'px, 0)'
+					'-moz-transform' 	: 'translate3d(0, -' + (index*height) + 'px, 0)',
+					'-ms-transform' 	: 'translate3d(0, -' + (index*height) + 'px, 0)',
+					'transform' 		: 'translate3d(0, -' + (index*height) + 'px, 0)'
 				});
 				bodyTimeout = setTimeout( function(){
 					animated = false;
