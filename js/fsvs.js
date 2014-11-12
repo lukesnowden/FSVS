@@ -30,7 +30,7 @@
 			mouseDragEvents 	: true,
 			touchEvents 		: true,
 			arrowKeyEvents 		: true,
-			allowScrollable		: '.scrollable',
+			allowScrollable		: 'scrollable',
 			pagination 			: true,
 			paginationTemplate	: '<li data-slide-index="[%num%]"><span></span></li>',
 			nthClasses 			: 5,
@@ -236,6 +236,11 @@
 
 		var mouseWheelHandler = function(e) {
 			wheelEvent = e;
+			var target = $(e.target);
+			if( target.hasClass( options.allowScrollable ) || target.parents( '.' + options.allowScrollable ).length !== 0 ) {
+				event.preventDefault();
+				return false;
+			}
 			if( typeof wheelEvent.originalEvent.wheelDelta !== 'undefined' ) {
 				// Chrome
 				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
@@ -243,10 +248,7 @@
 				// Firefox
 				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.detail ) / 20 ).toFixed(0) );
 			}
-			var target = $(e.target);
-			if( ! target.hasClass( options.allowScrollable ) && target.parents( options.allowScrollable ).length === 0 ) {
-				doTheFunkyStuff( wheely, wheelEvent );
-			}
+			doTheFunkyStuff( wheely, wheelEvent );
 		};
 
 		/**
@@ -259,7 +261,11 @@
 			windowScrollTop = $(w).scrollTop();
 			var activeFSVS = anyActiveFSVS();
 			var target = $(event.target);
-			if( ! activeFSVS && ! target.hasClass( options.allowScrollable ) && target.parents( options.allowScrollable ).length === 0 ) {
+			if( target.hasClass( options.allowScrollable ) || target.parents( '.' + options.allowScrollable ).length !== 0 ) {
+				event.preventDefault();
+				return false;
+			}
+			if( ! activeFSVS ) {
 				for( var i in fsvsObjects ) {
 					var fsvs = fsvsObjects[i];
 					var fsvsClass = fsvs.fsvs;
