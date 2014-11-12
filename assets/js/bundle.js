@@ -236,11 +236,21 @@
 
 		var mouseWheelHandler = function(e) {
 			wheelEvent = e;
+			var allowToRun = true;
 			var target = $(e.target);
+
+			// allow / disallow slide depending on if the target element is a scrollable (options.allowScrollable) element.
 			if( target.hasClass( options.allowScrollable ) || target.parents( '.' + options.allowScrollable ).length !== 0 ) {
-				event.preventDefault();
-				return false;
+				allowToRun = false;
+				var scrollableArea = target.closest('.' + options.allowScrollable);
+				if( target.hasClass( options.allowScrollable ) ) scrollableArea = target;
+				if( scrollingUp(e) && scrollableArea.scrollTop() === 0 ) {
+					allowToRun = true;
+				} else if( scrollableArea[0].scrollHeight - scrollableArea.scrollTop() === scrollableArea.outerHeight() ) {
+					allowToRun = true;
+				}
 			}
+
 			if( typeof wheelEvent.originalEvent.wheelDelta !== 'undefined' ) {
 				// Chrome
 				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
@@ -248,7 +258,7 @@
 				// Firefox
 				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.detail ) / 20 ).toFixed(0) );
 			}
-			doTheFunkyStuff( wheely, wheelEvent );
+			if( allowToRun ) doTheFunkyStuff( wheely, wheelEvent );
 		};
 
 		/**
@@ -260,11 +270,6 @@
 		var scrollHandeler = function(event) {
 			windowScrollTop = $(w).scrollTop();
 			var activeFSVS = anyActiveFSVS();
-			var target = $(event.target);
-			if( target.hasClass( options.allowScrollable ) || target.parents( '.' + options.allowScrollable ).length !== 0 ) {
-				event.preventDefault();
-				return false;
-			}
 			if( ! activeFSVS ) {
 				for( var i in fsvsObjects ) {
 					var fsvs = fsvsObjects[i];
