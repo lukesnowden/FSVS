@@ -4,7 +4,7 @@
 
 
 .block {
-	background: black;
+	background: #0d0d0d;
 	h1 {
 		text-shadow: 0px 1px 60px #fff;
 		color: $orange;
@@ -33,22 +33,22 @@
 
 #fsvs1 {
 	p, h2 {
-		color: black;
+		color: #0d0d0d;
 	}
 	.nth-class-1 {
-		background: black;
+		background: #0d0d0d;
 		.contents {
 			background: darken( $orange, 5% );
 		}
 	}
 	.nth-class-2 {
-		background: black;
+		background: #0d0d0d;
 		.contents {
 			background: darken( #285e5e, 5% );
 		}
 	}
 	.nth-class-3 {
-		background: black;
+		background: #0d0d0d;
 		.contents {
 			background: darken( #bc303a, 5% );
 		}

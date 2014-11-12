@@ -470,7 +470,7 @@ select {
   width: auto; }
 
 .block {
-  background: black; }
+  background: #0d0d0d; }
   .block h1 {
     text-shadow: 0px 1px 60px #fff;
     color: #eb7347;
@@ -493,17 +493,17 @@ select {
   padding: 30px; }
 
 #fsvs1 p, #fsvs1 h2 {
-  color: black; }
+  color: #0d0d0d; }
 #fsvs1 .nth-class-1 {
-  background: black; }
+  background: #0d0d0d; }
   #fsvs1 .nth-class-1 .contents {
     background: #e96230; }
 #fsvs1 .nth-class-2 {
-  background: black; }
+  background: #0d0d0d; }
   #fsvs1 .nth-class-2 .contents {
     background: #204c4c; }
 #fsvs1 .nth-class-3 {
-  background: black; }
+  background: #0d0d0d; }
   #fsvs1 .nth-class-3 .contents {
     background: #a82b34; }
 

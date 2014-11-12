@@ -235,13 +235,14 @@
 
 		var mouseWheelHandler = function(e) {
 			wheelEvent = e;
-			handelerStart = Date.now();
-			if( ! isCustomScrollHandelerActive ) {
-				customScrollHandeler( function(){
-					var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
-					doTheFunkyStuff( wheely, wheelEvent );
-				});
+			if( typeof wheelEvent.originalEvent.detail !== 'undefined' ) {
+				// Firefox
+				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.detail ) / 20 ).toFixed(0) );
+			} else {
+				// Chrome
+				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
 			}
+			doTheFunkyStuff( wheely, wheelEvent );
 		};
 
 		/**
