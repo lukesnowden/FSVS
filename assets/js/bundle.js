@@ -30,6 +30,7 @@
 			mouseDragEvents 	: true,
 			touchEvents 		: true,
 			arrowKeyEvents 		: true,
+			allowScrollable		: '.scrollable',
 			pagination 			: true,
 			paginationTemplate	: '<li data-slide-index="[%num%]"><span></span></li>',
 			nthClasses 			: 5,
@@ -235,14 +236,17 @@
 
 		var mouseWheelHandler = function(e) {
 			wheelEvent = e;
-			if( typeof wheelEvent.originalEvent.detail !== 'undefined' ) {
-				// Firefox
-				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.detail ) / 20 ).toFixed(0) );
-			} else {
+			if( typeof wheelEvent.originalEvent.wheelDelta !== 'undefined' ) {
 				// Chrome
 				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.wheelDelta ) / 40 ).toFixed(0) );
+			} else {
+				// Firefox
+				var wheely = Number( ( Math.abs( wheelEvent.originalEvent.detail ) / 20 ).toFixed(0) );
 			}
-			doTheFunkyStuff( wheely, wheelEvent );
+			var target = $(e.target);
+			if( ! target.hasClass( options.allowScrollable ) && target.parents( options.allowScrollable ).length === 0 ) {
+				doTheFunkyStuff( wheely, wheelEvent );
+			}
 		};
 
 		/**
@@ -254,7 +258,8 @@
 		var scrollHandeler = function(event) {
 			windowScrollTop = $(w).scrollTop();
 			var activeFSVS = anyActiveFSVS();
-			if( ! activeFSVS ) {
+			var target = $(event.target);
+			if( ! activeFSVS && ! target.hasClass( options.allowScrollable ) && target.parents( options.allowScrollable ).length === 0 ) {
 				for( var i in fsvsObjects ) {
 					var fsvs = fsvsObjects[i];
 					var fsvsClass = fsvs.fsvs;

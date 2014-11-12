@@ -516,6 +516,10 @@ select {
 #fsvs2 .nth-class-3 {
   background: #F62459; }
 
+.scrollable {
+  height: 400px;
+  overflow: auto; }
+
 html.hijacked {
   overflow: hidden; }
 
