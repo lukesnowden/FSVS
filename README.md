@@ -36,6 +36,10 @@ $(document).ready( function() {
 ```html
 <!doctype html>
 <html class="fsvs" lang="en">
+	<head>
+		<script src="jquery.js">
+		<script src="fsvs.js">
+	</head>
 	<body>
 		<div id="fsvs-body">
 			<div class="slide"></div>
