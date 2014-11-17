@@ -87,6 +87,22 @@
 		var lastScrollTop = 0;
 
 		/**
+		 * [hijackingFromScrollableArea description]
+		 * @type {Boolean}
+		 */
+
+		var hijackingFromScrollableArea = false;
+
+		/**
+		 * [hasBeenHijacked description]
+		 * @return {Boolean} [description]
+		 */
+
+		var hasBeenHijacked = function(){
+			return $('html').hasClass('hijacked');
+		};
+
+		/**
 		 * [anyActiveFSVS description]
 		 * @return {[type]} [description]
 		 */
@@ -294,6 +310,28 @@
 		};
 
 		/**
+		 * [scrollableAreaHandeler description]
+		 * @param  {[type]} e [description]
+		 * @return {[type]}   [description]
+		 */
+
+		var scrollableAreaHandeler = function(e) {
+			var scrollableArea = $(this);
+			if( ! hasBeenHijacked() && scrollingDown(e) && ! hijackingFromScrollableArea ) {
+				var fsvsClass = scrollableArea.closest('.fsvs')[0].fsvs;
+				hijackingFromScrollableArea = true;
+				fsvsClass.hijackScreen( 500, function(){
+					hijackingFromScrollableArea = false;
+					fsvsClass.showPagination();
+					fsvsClass.hijackScreen();
+					unbindScrollHandeler();
+					bindWheelHandeler();
+					unbindScrollableAreas();
+				});
+			}
+		};
+
+		/**
 		 * [bindScrollingEvent description]
 		 * @return {[type]} [description]
 		 */
@@ -308,6 +346,7 @@
 		 */
 
 		var unbindWheelHandeler = function() {
+			bindScrollableAreas();
 			$(w).unbind( 'wheel.fsvs mousewheel.fsvs DOMMouseScroll.fsvs MozMousePixelScroll.fsvs' );
 		}
 
@@ -330,15 +369,29 @@
 		};
 
 		/**
+		 * [bindScrollableAreas description]
+		 * @return {[type]} [description]
+		 */
+
+		var bindScrollableAreas = function() {
+			$('.'+ options.allowScrollable).bind( 'scroll.allowable.fsvs', scrollableAreaHandeler );
+		};
+
+		/**
+		 * [unbindScrollableAreas description]
+		 * @return {[type]} [description]
+		 */
+
+		var unbindScrollableAreas = function() {
+			$('.'+ options.allowScrollable).unbind( 'scroll.allowable.fsvs' );
+		};
+
+		/**
 		 * [bindTouchSwipe description]
 		 * @return {[type]} [description]
 		 */
 
 		var bindTouchSwipe = function() {
-
-			// $(w).scroll(function(e){
-			// 	console.log(e);
-			// });
 
 			var startY = null;
 
@@ -657,11 +710,26 @@
 			 * @return {[type]} [description]
 			 */
 
-			this.hijackScreen = function() {
-				$("html, body").scrollTop( jqElmOffset.top );
-				$('html').addClass( 'hijacked' );
-				jqElm.addClass('active');
-				activated = true;
+			this.hijackScreen = function( $speed, $callback ) {
+
+				var $speed = $speed || false;
+				var $callback = $callback || function(){};
+
+				if( ! $speed ) {
+					$("html, body").scrollTop( jqElmOffset.top );
+					$('html').addClass( 'hijacked' );
+					jqElm.addClass('active');
+					activated = true;
+				} else {
+					$("html, body").animate({
+						scrollTop : jqElmOffset.top
+					}, $speed, function(){
+						$('html').addClass( 'hijacked' );
+						jqElm.addClass('active');
+						activated = true;
+						$callback();
+					});
+				}
 			};
 
 			/**
@@ -877,7 +945,7 @@
 		};
 
 		bindScrollHandeler();
-		//bindWheelHandeler();
+		bindScrollableAreas();
 		bindKeyArrows();
 		bindTouchSwipe();
 
