@@ -319,15 +319,17 @@
 			var scrollableArea = $(this);
 			if( ! hasBeenHijacked() && scrollingDown(e) && ! hijackingFromScrollableArea ) {
 				var fsvsClass = scrollableArea.closest('.fsvs')[0].fsvs;
-				hijackingFromScrollableArea = true;
-				fsvsClass.hijackScreen( 500, function(){
-					hijackingFromScrollableArea = false;
-					fsvsClass.showPagination();
-					fsvsClass.hijackScreen();
-					unbindScrollHandeler();
-					bindWheelHandeler();
-					unbindScrollableAreas();
-				});
+				if( fsvsClass.isFirstSlide() ) {
+					hijackingFromScrollableArea = true;
+					fsvsClass.hijackScreen( 500, function(){
+						hijackingFromScrollableArea = false;
+						fsvsClass.showPagination();
+						fsvsClass.hijackScreen();
+						unbindScrollHandeler();
+						bindWheelHandeler();
+						unbindScrollableAreas();
+					});
+				}
 			}
 		};
 
@@ -337,6 +339,7 @@
 		 */
 
 		var bindWheelHandeler = function() {
+			unbindWheelHandeler();
 			$(w).bind( 'wheel.fsvs mousewheel.fsvs DOMMouseScroll.fsvs MozMousePixelScroll.fsvs', mouseWheelHandler );
 		};
 
@@ -356,6 +359,7 @@
 		 */
 
 		var bindScrollHandeler = function() {
+			unbindScrollHandeler();
 			$(w).bind( 'scroll.fsvs', scrollHandeler );
 		};
 
@@ -374,6 +378,7 @@
 		 */
 
 		var bindScrollableAreas = function() {
+			unbindScrollableAreas();
 			$('.'+ options.allowScrollable).bind( 'scroll.allowable.fsvs', scrollableAreaHandeler );
 		};
 
@@ -438,44 +443,88 @@
 			};
 
 			/**
-			 * [description]
+			 * [touchStartHandeler description]
 			 * @param  {[type]} ev [description]
 			 * @return {[type]}    [description]
 			 */
 
-			$(w).on( "touchstart.fsvs", function(ev) {
-    			var e = ev.originalEvent;
+			var touchStartHandeler = function(ev) {
+				var e = ev.originalEvent;
 				if( e.target.nodeName.toLowerCase() !== 'a' ) {
 					var touches = e.touches;
 					if( touches && touches.length ) startY = touches[0].pageY;
 				}
-			});
+			};
 
 			/**
-			 * [description]
+			 * [touchMoveHandeler description]
 			 * @param  {[type]} ev [description]
 			 * @return {[type]}    [description]
 			 */
 
-			$(w).on( "touchmove.fsvs", function(ev) {
-				if( activeFSVS = anyActiveFSVS() ) {
-					ev.preventDefault();
-					if( activeFSVS.fsvs.isFirstSlide() && isDraggingDown( ev ) ) {
-						bindScrollHandeler();
-						activeFSVS.fsvs.unjackScreen();
-					} else if( activeFSVS.fsvs.isLastSlide() && isDraggingUp( ev ) ) {
-						bindScrollHandeler();
-						activeFSVS.fsvs.unjackScreen();
-					} else
-					if( isDraggingUp(ev) ) {
-						activeFSVS.fsvs.slideUp();
-					} else if( isDraggingDown(ev) ) {
-						activeFSVS.fsvs.slideDown();
-					}
+			var touchMoveHandeler = function(ev){
+				var activeFSVS = anyActiveFSVS();
+				if( activeFSVS ) {
+					// unbindTouchMoveHandeler();
+					// ev.preventDefault();
+					// if( activeFSVS.fsvs.isFirstSlide() && isDraggingDown( ev ) ) {
+					// 	bindScrollHandeler();
+					// 	activeFSVS.fsvs.unjackScreen();
+					// } else if( activeFSVS.fsvs.isLastSlide() && isDraggingUp( ev ) ) {
+					// 	bindScrollHandeler();
+					// 	activeFSVS.fsvs.unjackScreen();
+					// } else
+					// if( isDraggingUp(ev) ) {
+					// 	activeFSVS.fsvs.slideUp();
+					// } else if( isDraggingDown(ev) ) {
+					// 	activeFSVS.fsvs.slideDown();
+					// }
 				} else {
 					//scrollHandeler(ev);
 				}
-			});
+			}
+
+			/**
+			 * [bindTouchStartHandeler description]
+			 * @return {[type]} [description]
+			 */
+
+			var bindTouchStartHandeler = function(){
+				bindTouchMoveHandeler();
+				unbindTouchStartHandeler();
+				$(w).bind( "touchstart.fsvs", touchStartHandeler );
+			};
+
+			/**
+			 * [unbindTouchStartHandeler description]
+			 * @return {[type]} [description]
+			 */
+
+			var unbindTouchStartHandeler = function() {
+				$(w).unbind( "touchstart.fsvs" );
+			};
+
+			/**
+			 * [bindTouchMoveHandeler description]
+			 * @return {[type]} [description]
+			 */
+
+			var bindTouchMoveHandeler = function(){
+				unbindTouchMoveHandeler();
+				$(w).bind( "touchmove.fsvs", touchMoveHandeler );
+			};
+
+			/**
+			 * [unbindTouchMoveHandeler description]
+			 * @return {[type]} [description]
+			 */
+
+			var unbindTouchMoveHandeler = function(){
+				$(w).unbind( "touchmove.fsvs" );
+			};
+
+			bindTouchStartHandeler();
+
 		};
 
 		/**
