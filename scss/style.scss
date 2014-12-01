@@ -1,0 +1,38 @@
+//
+//	Imports
+// ------------------------------------------------ \
+
+
+//	Utils
+// ------------------------------------------------ \
+
+@import "utils/variables";
+@import "utils/mixins";
+@import "utils/reset";
+@import "utils/helpers";
+@import "utils/grid/";
+
+
+//	Settings and variable overrides
+// ------------------------------------------------ \
+
+@import "settings";
+
+
+//	Base styles
+// ------------------------------------------------ \
+
+@import "base/base";
+
+
+//	Partials (your own custom styles)
+// ------------------------------------------------ \
+
+@import "partials/shared";
+@import "partials/fsvs";
+
+
+//	Sourcemap URL (**DO NOT DELETE**)
+// ------------------------------------------------ \
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,162 @@
+//
+//	Grid
+// ------------------------------------------------ \
+
+
+//  Settings
+// ------------------------------------------------ \
+
+$untitled-gutter: 3;
+$untitled-parent-first: false;
+$untitled-layout-direction: LTR;
+$g: $untitled-gutter;
+
+
+//  Functions
+// ------------------------------------------------ \
+
+@function -get_span($ratio: 1) {
+  @return $ratio * 100;
+}
+@function -get_column($ratios: 1, $g: $untitled-gutter) {
+  @if ($untitled-parent-first != 'true') {
+    $ratios: -reverse($ratios);
+  }
+  $w: 100;
+  @each $ratio in $ratios {
+    $g: $g / $w * 100;
+    $w: 100 * $ratio - $g + $ratio * $g;
+  }
+  @return $w $g;
+}
+@function -get_layout_direction() {
+  $result: '';
+  @if $untitled-layout-direction == RTL {
+    $result: right;
+  } @else {
+    $result: left;
+  }
+  @return $result;
+}
+@function -replace-nth($list, $index, $value) {
+  @if type-of($index) != number or $index == 0 or abs($index) > length($list) {
+    @warn "Invalid index (#{$index}) for `replace-nth`.";
+    @return false;
+  }
+  $list: set-nth($list, $index, $value);
+  @return if(not is-true($value), purge($list), $list);
+}
+@function -reverse($list, $recursive: false) {
+  $result: ();
+  @for $i from length($list)*-1 through -1 {
+    @if type-of(nth($list, abs($i))) == list and $recursive {
+      $result: append($result, reverse(nth($list, abs($i)), $recursive));
+    } @else {
+      $result: append($result, nth($list, abs($i)));
+    }
+  }
+  @return $result;
+}
+@function opposite-direction($dir) {
+  @if $dir == 'left' {
+    @return right;
+  }
+  @else if  $dir == 'right' {
+    @return left;
+  }
+  @else if $dir == 'ltr' {
+    @return rtl;
+  }
+  @else if $dir == 'rtl' {
+    @return ltr;
+  }
+  @else if $dir == 'top' {
+    @return bottom;
+  }
+  @else if $dir == 'bottom' {
+    @return top;
+  }
+  @else {
+    @warn "#{$dir} is not a direction! Make sure your direction is all lowercase!";
+    @return false;
+  }
+}
+
+
+//
+//  Grid
+// ------------------------------------------------ \
+
+// Columns with Gutters
+@mixin column($ratios: 1, $gutter: $untitled-gutter) {
+  $side: -get_layout_direction();
+  $column_widths: -get_column($ratios, $gutter);
+  $margin_last: 0;
+  $margin_l: $margin_last;
+  $margin_r: nth($column_widths, 2);
+  &:after {
+  content: "";
+  display: table;
+  clear: both;
+  }
+  float: $side;
+  clear: none;
+  text-align: inherit;
+  padding-left: 0;
+  padding-right: 0;
+  width: nth($column_widths, 1) * 1%;
+  margin-#{$side}: $margin_l * 1%;
+  margin-#{opposite-direction($side)}: $margin_r  * 1%;
+}
+@mixin col($args...) {
+  @include column($args...);
+}
+
+// Columns without Gutters
+@mixin span($ratio: 1) {
+  $side: -get_layout_direction();
+  $span_width: -get_span($ratio);
+  $margin_r: 0;
+  $margin_l: $margin_r;
+  &:after {
+  content: "";
+  display: table;
+  clear: both;
+  }
+  float: $side;
+  clear: none;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: inherit;
+  width: $span_width * 1%;
+  margin-#{$side}: $margin_l * 1%;
+  margin-#{opposite-direction($side)}: $margin_r * 1%;
+}
+
+// Horizontal Centering Block Elements
+@mixin container($max_width: 100%, $pad: 1em) {
+  &:after {
+  content: "";
+  display: table;
+  clear: both;
+  }
+  width: auto;
+  max-width: $max_width;
+  float: none;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: $pad;
+  padding-right: $pad;
+}
+
+// Omega mixin for last in a row
+@mixin last{
+    margin-right: 0;
+    float: right;
+}
+
+// Set a class for a container
+.container {
+    @include container();
+}

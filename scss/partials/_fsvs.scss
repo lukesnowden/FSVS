@@ -41,14 +41,14 @@ html.fsvs {
 			margin: 0 0 2px 0;
 			cursor: pointer;
 			> span {
-				@include border-radius( 100% );
+				border-radius: 100%;
 				width: 22px;
 				height: 22px;
 				line-height: 22px;
 				border: 1px solid white;
 				display: block;
 				> span {
-					@include border-radius( 100% );
+					border-radius: 100%;
 					width: 12px;
 					height: 12px;
 					line-height: 12px;

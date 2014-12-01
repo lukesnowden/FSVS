@@ -1,0 +1,38 @@
+<!doctype html>
+<html class="fsvs" lang="en">
+    <head>
+        <link href="assets/css/style.css" media="all" rel="stylesheet" type="text/css" />
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="assets/js/bundle.js"></script>
+        <script>
+        jQuery(document).ready(function($){
+            var slider = $.fn.fsvs({
+                speed               : 1000,
+                bodyID              : 'fsvs-body',
+                selector            : '> .slide',
+                mouseSwipeDisance   : 40,
+                afterSlide          : function(){},
+                beforeSlide         : function(){},
+                endSlide            : function(){},
+                mouseWheelEvents    : true,
+                mouseWheelDelay     : false,
+                mouseDragEvents     : false,
+                touchEvents         : true,
+                arrowKeyEvents      : true,
+                pagination          : true,
+                nthClasses          : true,
+                detectHash          : true
+            });
+        });
+        </script>
+    </head>
+    <body>
+        <div id="fsvs-body">
+            <div class="slide">Slide 1 <input type="text" name="sdsd" /></div>
+            <div class="slide">Slide 2</div>
+            <div class="slide">Slide 3</div>
+            <div class="slide">Slide 4</div>
+        </div>
+    </body>
+</html>

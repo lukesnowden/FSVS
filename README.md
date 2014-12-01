@@ -14,7 +14,7 @@ more information http://luke.sno.wden.co.uk/full-screen-vertical-scroll
 ```javascript
 $(document).ready( function() {
 	var slider = $.fn.fsvs({
-		speed : 5000,
+		speed : 1000,
 		bodyID : 'fsvs-body',
 		selector : '> .slide',
 		mouseSwipeDisance : 40,
@@ -44,8 +44,10 @@ $(document).ready( function() {
 <!doctype html>
 <html class="fsvs" lang="en">
 	<head>
-		<script src="jquery.js">
-		<script src="fsvs.js">
+		<link href="assets/css/style.css" media="all" rel="stylesheet" type="text/css" />
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="assets/js/bundle.js"></script>
 	</head>
 	<body>
 		<div id="fsvs-body">

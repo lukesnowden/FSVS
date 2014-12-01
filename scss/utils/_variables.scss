@@ -1,0 +1,107 @@
+
+//
+//	Variables
+// ------------------------------------------------ \
+
+
+//	Colors
+// ------------------------------------------------ \
+
+// generic
+$green: 		#1abc9c!default;
+$dk-green: 		#16a085!default;
+$emerald: 		#2ecc71!default;
+$dk-emerald: 	#27ae60!default;
+$blue: 			#3498db!default;
+$dk-blue: 		#2980b9!default;
+$navy: 			#34495e!default;
+$dk-navy: 		#2c3e50!default;
+$purple: 		#9b59b6!default;
+$dk-purple: 	#8e44ad!default;
+$yellow: 		#f1c40f!default;
+$dk-yellow: 	#f39c12!default;
+$orange: 		#eb7347!default;
+
+$dk-orange: 	#d35400!default;
+$red: 			#e74c3c!default;
+$dk-red: 		#c0392b!default;
+$lt-grey: 		#ecf0f1!default;
+$grey: 			#bdc3c7!default;
+$med-grey: 		#808080!default;
+$dk-grey: 		#7f8c8d!default;
+$off-white: 	#fafafa!default;
+$off-black: 	#465563!default;
+$light: 		#e2e2e2!default;
+$dark: 			#252525!default;
+
+// brand
+$brand: 		#f06060!default;
+$accent: 		#ccc!default;
+
+// Helpers
+$info: 		$blue!default;
+$success: $emerald!default;
+$warning: lighten($yellow, 25%)!default;
+$danger: 	$red!default;
+
+
+//	Base
+// ------------------------------------------------ \
+
+// generic
+$base-font-size: 				14px!default;
+$base-line-height: 			21px!default;
+$base-font-color: 			$med-grey!default;
+$base-background-color: #fff!default;
+
+// font stacks
+$sans-serif: 		'Open Sans', sans-serif !default;
+$serif: 			Georgia, Times, "Times New Roman", serif!default;
+
+// headings
+$base-heading-line-height: 	1.1!default;						$base-heading-font-color: 	$dark!default;
+$base-heading-font-stack: 	$sans-serif!default;		$base-heading-font-weight: 	normal!default;
+
+//heading sizes
+$base-heading-font-size-h1: 36px !default;					$base-heading-font-size-h2: 30px !default;
+$base-heading-font-size-h3: 24px !default;					$base-heading-font-size-h4: 18px !default;
+$base-heading-font-size-h5: 14px !default;					$base-heading-font-size-h6: 12px !default;
+
+// links
+$base-link-color: $brand!default;
+$base-link-hover-color: $dark!default;
+
+// z-index
+$l1: 1000!default;		$l2: 	2000!default;
+$l3: 3000!default;		$l4: 	4000!default;
+$l5: 5000!default;		$l6: 	6000!default;
+$l7: 7000!default;		$l8: 	8000!default;
+$l9: 9000!default;		$l10: 10000!default;
+
+
+//	Media Queries
+// ------------------------------------------------ \
+
+// extra small devices lt-768px require no media query as this is default
+
+$sml: 768px!default; 	// small devices (tablets, 768px and up)
+$med:	978px!default;	// medium devices (desktops, 992px and up)
+$lg: 	1218px!default;	// large devices (large desktops, 1200px and up)
+
+
+//	Spacings
+// ------------------------------------------------ \
+
+$base-space: 							$base-line-height;
+$base-space--quarter: 		round($base-line-height / 4);
+$base-space--half: 				round($base-line-height / 2);
+$base-space--double: 			round($base-line-height * 2);
+$base-space--triple: 			round($base-line-height * 3);
+$base-space--quad: 				round($base-line-height * 4);
+
+
+//	Optionals
+// ------------------------------------------------ \
+
+// Fontawesome fonts path
+$fa-font-path: "";

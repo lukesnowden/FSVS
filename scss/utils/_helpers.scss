@@ -1,0 +1,57 @@
+//
+//	Helper classes
+// ------------------------------------------------ \
+
+
+//	Clearfix
+// ------------------------------------------------ \
+
+.clearfix, .cf {
+	&:after {
+	content: "";
+	display: table;
+	clear: both;
+	}
+}
+
+
+//    Hide Skip Link
+// ------------------------------------------------ \
+
+.skip-link {
+    height: 1px;
+    width: 1px;
+    position: absolute;
+    overflow: hidden;
+    top: -10px;
+}
+
+
+//  Margins
+// ------------------------------------------------ \
+
+// Consistent bottom margins
+h1, h2, h3, h4, h5, h6, 
+ul, ol, dl, 
+blockquote, p, address, 
+table, 
+fieldset, figure, 
+pre {
+    margin-bottom: $base-space;
+    margin-bottom: ($base-space / $base-font-size) * 1rem;
+}
+
+
+// Consistent left margins
+ul, ol, dd {
+    margin-left: 2 * $base-space;
+    margin-left: (2 * $base-space / $base-font-size) * 1rem;
+}
+
+
+//  Generic separator spacing
+// ------------------------------------------------ \
+
+.sep {
+  margin: 0 $base-space--half;
+}
