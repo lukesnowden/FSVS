@@ -167,7 +167,6 @@
 		var bindMouseDrag = function() {
 			var x, y;
 			window.onmousedown = function(e) {
-				e.preventDefault();
 				y = e.y;
 			}
 			window.onmouseup = function(e) {
@@ -265,14 +264,14 @@
 		 */
 
 		var bindKeyArrows = function() {
+			allow = true;
+			$('input,textarea,select,option', body)
+			.bind( 'focus.fsvs', function(){ allow = false; })
+			.bind( 'blur.fsvs', function(){ allow = true; });
 			window.onkeydown = function(e) {
 				e = e || window.event;
-			    if ( e.keyCode == '38' ) {
-			        app.slideUp();
-			    }
-			    else if ( e.keyCode == '40' ) {
-					app.slideDown();
-			    }
+			    if ( e.keyCode == '38' && allow ) app.slideUp();
+			    else if ( e.keyCode == '40' && allow ) app.slideDown();
 			}
 		};
 
