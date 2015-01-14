@@ -6,6 +6,13 @@
   "authors": [
     "Luke Snowden <luke@sno.wden.co.uk>"
   ],
+  "keywords" : [
+    "full screen vertical scroll",
+    "FSVS",
+    "page slider",
+    "slider",
+    "one page slider"
+  ],
   "description": "Full Screen Vertical Scroll",
   "license": "MIT",
   "ignore": [
