@@ -37,7 +37,7 @@ $(document).ready( function() {
 ```
 
 ###Basic HTML structure
-
+(please note that the fsvs class is needed on the HTML tag)
 
 
 ```html
