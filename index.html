@@ -24,6 +24,12 @@
                 nthClasses          : true,
                 detectHash          : true
             });
+            setTimeout(function(){
+                slider.unbind();
+                setTimeout(function(){
+                    slider.rebind();
+                }, 10000);
+            }, 10000);
         });
         </script>
     </head>

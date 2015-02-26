@@ -389,6 +389,19 @@
 		}
 
 		/**
+		 * [removeStyling description]
+		 * @return {[type]} [description]
+		 */
+		var removeStyling = function(){
+			body.attr('style', '');
+			$('> div', body).each(function(i){
+				$(this).attr('class', 'slide' );
+			});
+			$('body').attr('class','');
+			$('#fsvs-pagination').remove();
+		};
+
+		/**
 		 * [app description]
 		 * @type {Object}
 		 */
@@ -524,6 +537,7 @@
 				unBindMouseWheelEvent();
 				unbindKeyArrows();
 				unbindTouchSwipe();
+				removeStyling();
 				$('html').removeClass('fsvs');
 			},
 
@@ -532,19 +546,8 @@
 			 * @return {[type]} [description]
 			 */
 			rebind : function() {
-				if( options.mouseWheelEvents ) {
-					bindMouseWheelEvent();
-				}
-				if( options.arrowKeyEvents ) {
-					bindKeyArrows();
-				}
-				if( options.mouseDragEvents ) {
-					bindMouseDrag();
-				}
-				if( options.touchEvents ) {
-					bindTouchSwipe();
-				}
 				$('html').addClass('fsvs');
+				app.init();
 			},
 
 			/**
