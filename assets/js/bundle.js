@@ -464,7 +464,7 @@
 					marginTop : '-' + (paginationHeight/2) + 'px',
 					right : '25px'
 				});
-				$('li', pagination).click( function(e){
+				$('li', pagination).bind( 'click.fsvs', function(e){
 					ignoreHashChange = true;
 					$('.active', pagination).removeClass( 'active' );
 					$(this).addClass( 'active' );
@@ -526,10 +526,8 @@
 				var _body = $('body');
 				_body.removeClass( removeClass = 'active-slide-' + (before+1) );
 				_body.addClass( 'active-slide-' + (after+1) );
-
 				$( options.selector, body ).eq( before ).removeClass( 'active-slide' );
 				$( options.selector, body ).eq( after ).addClass( 'active-slide' );
-
 				if( options.nthClasses ) {
 					_body.removeClass( 'active-nth-slide-' + (( before % options.nthClasses )+1) );
 					_body.addClass( 'active-nth-slide-' + (( after % options.nthClasses )+1) );
@@ -642,6 +640,7 @@
 					else if (window.attachEvent) {
 					    window.attachEvent( "onhashchange", changeViaHash );
 					}
+					$('body').attr('class', ' ');
 				}
 				app.addClasses( 0, 0 );
 			}
