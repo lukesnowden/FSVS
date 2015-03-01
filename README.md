@@ -14,7 +14,7 @@ more information http://luke.sno.wden.co.uk/full-screen-vertical-scroll
 ```javascript
 $(document).ready( function() {
 	var slider = $.fn.fsvs({
-		speed : 1000,
+		speed : 5000,
 		bodyID : 'fsvs-body',
 		selector : '> .slide',
 		mouseSwipeDisance : 40,
@@ -23,6 +23,7 @@ $(document).ready( function() {
 		endSlide : function(){},
 		mouseWheelEvents : true,
 		mouseWheelDelay : false,
+		scrollabelArea : 'scrollable',
 		mouseDragEvents : true,
 		touchEvents : true,
 		arrowKeyEvents : true,
@@ -33,6 +34,8 @@ $(document).ready( function() {
 	//slider.slideUp();
 	//slider.slideDown();
 	//slider.slideToIndex( index );
+	//slider.unbind();
+	//slider.rebind();
 });
 ```
 
