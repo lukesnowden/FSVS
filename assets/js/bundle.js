@@ -28,6 +28,7 @@
 			endSlide : function(){},
 			mouseWheelEvents : true,
 			mouseWheelDelay : false,
+			scrollabelArea : 'scrollable',
 			mouseDragEvents : true,
 			touchEvents : true,
 			arrowKeyEvents : true,
@@ -251,22 +252,49 @@
 			if( ( ! scrolling || ( options.mouseWheelDelay && Date.now() > mouseWheelScrollStart + options.mouseWheelDelay ) ) && Math.abs( wheely ) > 5 ) {
 				mouseWheelScrollStart = Date.now();
 				scrolling = true;
-				// Firefox goes backwards... obviously
-				if( e.originalEvent && e.originalEvent.detail ) {
-					if( delta > 0 ) {
-						app.slideDown();
-					} else {
+				var allowToRun = true;
+				var target = $(ev.target);
+				if( target.hasClass( options.scrollabelArea ) || target.parents( '.' + options.scrollabelArea ).length !== 0 ) {
+					allowToRun = false;
+					var scrollableArea = target.closest('.' + options.scrollabelArea);
+					if( target.hasClass( options.scrollabelArea ) ) scrollableArea = target;
+					if( isScrollingUp(ev) && scrollableArea.scrollTop() === 0 ) {
+						allowToRun = true;
+					} else if( scrollableArea[0].scrollHeight - scrollableArea.scrollTop() === scrollableArea.outerHeight() ) {
+						allowToRun = true;
+					}
+				}
+				if( allowToRun ) {
+					if( isScrollingUp(ev) ) {
 						app.slideUp();
+					} else {
+						app.slideDown();
 					}
 				} else {
-					if( delta > 0 ) {
-						app.slideUp();
-					} else {
-						app.slideDown();
-					}
+					scrolling = false;
 				}
 			}
 		};
+
+		/**
+		 * [isScrollingUp description]
+		 * @param  {[type]}  ev [description]
+		 * @return {Boolean}    [description]
+		 */
+		var isScrollingUp = function(ev){
+			var e = window.event || ev;
+			var wheely = ( e.wheelDelta || -e.detail || e.originalEvent.detail );
+			var delta = Math.max( -1, Math.min( 1, wheely ) );
+			if( isChrome() ) wheely = Math.floor( wheely / 5 );
+			if( e.originalEvent && e.originalEvent.detail ) {
+				if( delta > 0 ) {
+					return false;
+				}
+			} else if( delta < 0 ) {
+				return false;
+			}
+			return true;
+		}
 
 		/**
 		 * [bindMouseWheelEvent description]
