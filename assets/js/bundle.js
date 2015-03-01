@@ -464,7 +464,7 @@
 					marginTop : '-' + (paginationHeight/2) + 'px',
 					right : '25px'
 				});
-				$('li', pagination).click( function(e){
+				$('li', pagination).bind( 'click.fsvs', function(e){
 					ignoreHashChange = true;
 					$('.active', pagination).removeClass( 'active' );
 					$(this).addClass( 'active' );
@@ -642,6 +642,7 @@
 					else if (window.attachEvent) {
 					    window.attachEvent( "onhashchange", changeViaHash );
 					}
+					$('body').attr('class', ' ');
 				}
 				app.addClasses( 0, 0 );
 			}
