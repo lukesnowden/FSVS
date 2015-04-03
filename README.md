@@ -1,8 +1,8 @@
 #Showcase
 Send a pull request to add your projects to the showcase list
 
-*https://cryptuitive.com/ - Jon Cursi
-*http://luke.sno.wden.co.uk/ - Me
+* https://cryptuitive.com/ - Jon Cursi
+* http://luke.sno.wden.co.uk/ - Me
 
 #FSVS2 (BETA) on development branch
 
