@@ -640,9 +640,10 @@
 					else if (window.attachEvent) {
 					    window.attachEvent( "onhashchange", changeViaHash );
 					}
-					$('body').attr('class', ' ');
 				}
-				app.addClasses( 0, 0 );
+				if( window.location.hash === '' ) {
+					app.addClasses( 0, 0 );
+				}
 			}
 
 		};
