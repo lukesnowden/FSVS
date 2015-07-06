@@ -20,6 +20,7 @@
 
 		var defaults = {
 			speed : 5000,
+			autoPlay : false,
 			bodyID : 'fsvs-body',
 			selector : '> .slide',
 			mouseSwipeDisance : 40,
@@ -41,6 +42,12 @@
 			defaults[i] = options[i];
 		}
 		options = defaults;
+
+		/**
+		 * [loop description]
+		 * @type {[type]}
+		 */
+		var loop = null;
 
 		/**
 		 * [currentSlideIndex description]
@@ -355,6 +362,9 @@
 			if( ! app.canSlideDown() ) {
 				options.endSlide( index );
 			}
+			if( options.autoPlay && loop === null ) {
+				play();
+			}
 			scrolling = false;
 		};
 
@@ -414,7 +424,21 @@
 				slideCallback( index );
 				bodyTimeout = null;
 			}, options.speed );
-		}
+		};
+
+		/**
+		 * [play description]
+		 * @return {[type]} [description]
+		 */
+		var play = function(){
+			loop = setInterval(function(){
+				if( app.canSlideDown() ) {
+					app.slideDown();
+				} else {
+					app.slideToIndex(0);
+				}
+			}, options.autoPlay );
+		};
 
 		/**
 		 * [removeStyling description]
@@ -542,6 +566,10 @@
 
 			slideToIndex : function( index, e ) {
 				var e = e || false;
+				if( e && options.autoPlay ) {
+					clearInterval( loop );
+					loop = null;
+				}
 				if( ! e && pagination ) {
 					$('.active', pagination).removeClass( 'active' );
 					$('> *', pagination).eq(index).addClass( 'active' );
@@ -643,6 +671,11 @@
 				}
 				if( window.location.hash === '' ) {
 					app.addClasses( 0, 0 );
+				}
+				if( options.autoPlay ) {
+					if( options.autoPlay > options.speed ) {
+						play();
+					}
 				}
 			}
 
