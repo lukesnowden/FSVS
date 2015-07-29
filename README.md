@@ -30,7 +30,7 @@ $(document).ready( function() {
 		endSlide : function(){},
 		mouseWheelEvents : true,
 		mouseWheelDelay : false,
-		scrollabelArea : 'scrollable',
+		scrollableArea : 'scrollable',
 		mouseDragEvents : true,
 		touchEvents : true,
 		arrowKeyEvents : true,
