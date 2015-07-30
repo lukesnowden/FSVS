@@ -261,10 +261,10 @@
 				scrolling = true;
 				var allowToRun = true;
 				var target = $(ev.target);
-				if( target.hasClass( options.scrollabelArea ) || target.parents( '.' + options.scrollabelArea ).length !== 0 ) {
+				if( target.hasClass( options.scrollableArea ) || target.parents( '.' + options.scrollableArea ).length !== 0 ) {
 					allowToRun = false;
-					var scrollableArea = target.closest('.' + options.scrollabelArea);
-					if( target.hasClass( options.scrollabelArea ) ) scrollableArea = target;
+					var scrollableArea = target.closest('.' + options.scrollableArea);
+					if( target.hasClass( options.scrollableArea ) ) scrollableArea = target;
 					if( isScrollingUp(ev) && scrollableArea.scrollTop() === 0 ) {
 						allowToRun = true;
 					} else if( scrollableArea[0].scrollHeight - scrollableArea.scrollTop() === scrollableArea.outerHeight() ) {
