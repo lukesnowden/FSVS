@@ -203,15 +203,15 @@
 		var bindTouchSwipe = function() {
 			var startY = null;
 			$(window).on( "touchstart.fsvs", function(ev) {
-    			var e = ev.originalEvent;
-    			var cancelOn = ['a','input','textarea','select'];
-				if( $.inArray( e.target.nodeName.toLowerCase(), cancelOn ) == -1 ) {
+				var e = ev.originalEvent;
+				//var cancelOn = ['a','input','textarea','select'];
+				//if( $.inArray( e.target.nodeName.toLowerCase(), cancelOn ) == -1 ) {
 					var touches = e.touches;
 					if( touches && touches.length ) {
 						startY = touches[0].pageY;
 					}
-					e.preventDefault();
-				}
+					//e.preventDefault();
+				//}
 			});
 			$(window).on( "touchmove.fsvs", function(ev) {
     			var e = ev.originalEvent;
