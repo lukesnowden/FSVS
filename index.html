@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="fsvs" lang="en">
     <head>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link href="assets/css/style.css" media="all" rel="stylesheet" type="text/css" />
         <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -8,7 +9,7 @@
         <script>
         jQuery(document).ready(function($){
             var slider = $.fn.fsvs({
-                autoPlay            : 5000,
+                autoPlay            : false,
                 speed               : 1000,
                 bodyID              : 'fsvs-body',
                 selector            : '> .slide',
@@ -30,7 +31,14 @@
     </head>
     <body>
         <div id="fsvs-body">
-            <div class="slide">Slide 1</div>
+            <div class="slide">
+                <p>Slide 1</p>
+                <p>
+                    <a href="http://luke.sno.wden.co.uk/assets/images/tappy.png">
+                        <img src="http://luke.sno.wden.co.uk/assets/images/tappy.png" alt="">
+                    </a>
+                </p>
+            </div>
             <div class="slide">Slide 2
                 <div class="scrollable" style="background:grey;width:500px;height:400px;overflow:auto;">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tincidunt aliquet venenatis. Quisque nec dolor id purus aliquam viverra a ac eros. Quisque a tellus semper, mollis ligula et, rutrum risus. Suspendisse purus turpis, semper et turpis eu, venenatis egestas nisi. Vestibulum rhoncus laoreet augue, sit amet aliquet sem imperdiet nec. Aenean id luctus turpis. Aenean porttitor libero in sem tempor lobortis. Mauris in magna quis purus volutpat laoreet. Nullam sollicitudin volutpat lorem, non dictum purus maximus ut. Morbi id condimentum sapien, convallis malesuada lacus. Mauris id varius nunc. Duis ligula elit, ornare et leo mattis, volutpat vulputate arcu. Nulla tincidunt erat sed cursus ultricies. Curabitur bibendum turpis quis velit porttitor, at eleifend dolor dictum.

@@ -29,7 +29,7 @@
 			endSlide : function(){},
 			mouseWheelEvents : true,
 			mouseWheelDelay : false,
-			scrollabelArea : 'scrollable',
+			scrollableArea : 'scrollable',
 			mouseDragEvents : true,
 			touchEvents : true,
 			arrowKeyEvents : true,
@@ -205,7 +205,14 @@
 			$(window).on( "touchstart.fsvs", function(ev) {
     			var e = ev.originalEvent;
     			var cancelOn = ['a','input','textarea','select'];
-				if( $.inArray( e.target.nodeName.toLowerCase(), cancelOn ) == -1 ) {
+    			var targetName = e.target.nodeName.toLowerCase();
+    			var cancel = false;
+    			cancelOn.forEach(function(_cancelOn){
+    				if( $(e.target).parents(_cancelOn).length !== 0 ) {
+    					cancel = true;
+    				}
+    			});
+				if( $.inArray( targetName, cancelOn ) == -1 && ! cancel ) {
 					var touches = e.touches;
 					if( touches && touches.length ) {
 						startY = touches[0].pageY;
@@ -261,10 +268,10 @@
 				scrolling = true;
 				var allowToRun = true;
 				var target = $(ev.target);
-				if( target.hasClass( options.scrollabelArea ) || target.parents( '.' + options.scrollabelArea ).length !== 0 ) {
+				if( target.hasClass( options.scrollableArea ) || target.parents( '.' + options.scrollableArea ).length !== 0 ) {
 					allowToRun = false;
-					var scrollableArea = target.closest('.' + options.scrollabelArea);
-					if( target.hasClass( options.scrollabelArea ) ) scrollableArea = target;
+					var scrollableArea = target.closest('.' + options.scrollableArea);
+					if( target.hasClass( options.scrollableArea ) ) scrollableArea = target;
 					if( isScrollingUp(ev) && scrollableArea.scrollTop() === 0 ) {
 						allowToRun = true;
 					} else if( scrollableArea[0].scrollHeight - scrollableArea.scrollTop() === scrollableArea.outerHeight() ) {
