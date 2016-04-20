@@ -257,7 +257,13 @@
 
 		var mouseWheelHandler = function( ev ) {
 			var e = window.event || ev;
-			var wheely = ( e.wheelDelta || -e.detail || e.originalEvent.detail );
+			var wheely = 0;			
+		    if (e.type == 'mousewheel') {
+		        wheely = (e.originalEvent.wheelDelta * -1);
+		    }else if (e.type == 'DOMMouseScroll') {
+		        wheely = 40 * e.originalEvent.detail;
+		    }
+			wheely = ( e.wheelDelta || -e.detail || wheely);
 			var delta = Math.max( -1, Math.min( 1, wheely ) );
 			if( isChrome() ) {
 				// chrome seems to extends its "wheely" motion
