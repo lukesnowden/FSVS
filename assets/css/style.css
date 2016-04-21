@@ -241,8 +241,8 @@ html {
   font-family: "Open Sans", sans-serif;
   font-size: 0.875em;
   line-height: 1.5;
-  background-color: white;
-  color: gray;
+  background-color: #fff;
+  color: #808080;
   overflow-y: scroll;
   height: 100%; }
 
@@ -404,7 +404,7 @@ textarea {
   width: 100%;
   display: block;
   font-size: 14px;
-  color: gray;
+  color: #808080;
   margin-bottom: 21px;
   outline: none;
   border: 1px solid transparent;
@@ -529,3 +529,5 @@ html.fsvs {
           background: white; }
       html.fsvs #fsvs-pagination li:last-child {
         margin: 0; }
+
+/*# sourceMappingURL=style.css.map */
