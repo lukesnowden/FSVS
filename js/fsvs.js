@@ -23,7 +23,6 @@
 			speed : 5000,
 			autoPlay : false,
 			bodyID : 'fsvs-body',
-			selector : '> .slide',
 			mouseSwipeDisance : 40,
 			afterSlide : function(){},
 			beforeSlide : function(){},
@@ -36,7 +35,9 @@
 			arrowKeyEvents : true,
 			pagination : true,
 			nthClasses : false,
-			detectHash : true
+			detectHash : true,
+			slideClass : "slide",
+			selector : '> .' + this.slideClass,
 		};
 
 		for( var i in options ) {
@@ -106,6 +107,20 @@
 		 */
 
 		var pagination = false;
+
+		/**
+		 * [curentActiveSlide description]
+		 * @type {Number}
+		 */
+
+		var _curentActiveSlide = null;
+
+		/**
+		 * [curentActiveSlide description]
+		 * @type {Number}
+		 */
+
+		var _activeSlideClass = "active-slide";
 
 		/**
 		 * [isChrome description]
@@ -460,10 +475,10 @@
 		 */
 		var removeStyling = function(){
 			body.attr('style', '');
-			$('> div', body).each(function(i){
-				$(this).attr('class', 'slide' );
+			$(options.selector, body).each(function(i){
+				$(this).removeClass(_activeSlideClass);
 			});
-			$('body').attr('class','');
+			$('body').removeClass(_activeSlideClass + '-' + _curentActiveSlide);
 			$('#fsvs-pagination').remove();
 		};
 
@@ -562,10 +577,11 @@
 
 			addClasses : function( before, after ) {
 				var _body = $('body');
-				_body.removeClass( removeClass = 'active-slide-' + (before+1) );
-				_body.addClass( 'active-slide-' + (after+1) );
-				$( options.selector, body ).eq( before ).removeClass( 'active-slide' );
-				$( options.selector, body ).eq( after ).addClass( 'active-slide' );
+				_curentActiveSlide =  (after+1);
+				_body.removeClass( removeClass = _activeSlideClass +'-' + (before+1) );
+				_body.addClass( _activeSlideClass + '-' + _curentActiveSlide  );
+				$( options.selector, body ).eq( before ).removeClass( _activeSlideClass );
+				$( options.selector, body ).eq( after ).addClass( _activeSlideClass );
 				if( options.nthClasses ) {
 					_body.removeClass( 'active-nth-slide-' + (( before % options.nthClasses )+1) );
 					_body.addClass( 'active-nth-slide-' + (( after % options.nthClasses )+1) );
