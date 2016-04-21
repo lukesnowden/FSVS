@@ -19,6 +19,7 @@
 		 */
 
 		var defaults = {
+			el : null,
 			speed : 5000,
 			autoPlay : false,
 			bodyID : 'fsvs-body',
@@ -651,7 +652,7 @@
 			 */
 
 			init : function() {
-				body = $( '#' + options.bodyID );
+				body = $( (options.el) ? options.el : '#' + options.bodyID );
 				if( hasTransition() ) {
 					app.setSpeed( options.speed );
 				}
