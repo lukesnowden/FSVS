@@ -227,6 +227,9 @@
     				if( $(e.target).parents(_cancelOn).length !== 0 ) {
     					cancel = true;
     				}
+					if( $(e.target).parents( '.' + options.scrollableArea ).length != 0 ){
+						cancel = true;
+					}
     			});
 				if( $.inArray( targetName, cancelOn ) == -1 && ! cancel ) {
 					var touches = e.touches;
