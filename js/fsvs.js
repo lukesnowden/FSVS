@@ -189,14 +189,23 @@
 		 */
 
 		var bindMouseDrag = function() {
+			function isScrollable(element) {
+				return element.parents( '.' + options.scrollabelArea ).length != 0 ;
+			}
 			var x, y;
 			window.onmousedown = function(e) {
-				y = e.y;
+				var cancelOn = ['a','input','textarea','select'];
+				if( $.inArray( e.target.nodeName.toLowerCase(), cancelOn ) != -1 && isScrollable( $(e.target) ) ) {
+					cancel = true;
+				} else {
+					y = e.y;
+					cancel = false;
+				}
 			}
 			window.onmouseup = function(e) {
-				if( e.y > ( y+options.mouseSwipeDisance ) ) {
+				if( e.y > ( y+options.mouseSwipeDisance && !cancel ) ) {
 					app.slideUp();
-				} else if( e.y < ( y-options.mouseSwipeDisance ) ) {
+				} else if( e.y < ( y-options.mouseSwipeDisance && !cancel ) ) {
 					app.slideDown();
 				}
 			}
