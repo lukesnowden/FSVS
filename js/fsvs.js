@@ -330,7 +330,7 @@
 		 */
 		var isScrollingUp = function(ev){
 			var e = window.event || ev;
-			var wheely = ( e.wheelDelta || -e.detail || e.originalEvent.detail );
+			var wheely = ( e.wheelDelta || e.detail || e.originalEvent.detail );
 			var delta = Math.max( -1, Math.min( 1, wheely ) );
 			if( isChrome() ) wheely = Math.floor( wheely / 5 );
 			if( e.originalEvent && e.originalEvent.detail ) {

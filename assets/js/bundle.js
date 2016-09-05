@@ -189,14 +189,23 @@
 		 */
 
 		var bindMouseDrag = function() {
+			function isScrollable(element) {
+				return element.parents( '.' + options.scrollabelArea ).length != 0 ;
+			}
 			var x, y;
 			window.onmousedown = function(e) {
-				y = e.y;
+				var cancelOn = ['a','input','textarea','select'];
+				if( $.inArray( e.target.nodeName.toLowerCase(), cancelOn ) != -1 && isScrollable( $(e.target) ) ) {
+					cancel = true;
+				} else {
+					y = e.y;
+					cancel = false;
+				}
 			}
 			window.onmouseup = function(e) {
-				if( e.y > ( y+options.mouseSwipeDisance ) ) {
+				if( e.y > ( y+options.mouseSwipeDisance && !cancel ) ) {
 					app.slideUp();
-				} else if( e.y < ( y-options.mouseSwipeDisance ) ) {
+				} else if( e.y < ( y-options.mouseSwipeDisance && !cancel ) ) {
 					app.slideDown();
 				}
 			}
@@ -227,13 +236,15 @@
     				if( $(e.target).parents(_cancelOn).length !== 0 ) {
     					cancel = true;
     				}
+					if( $(e.target).parents( '.' + options.scrollableArea ).length != 0 ){
+						cancel = true;
+					}
     			});
 				if( $.inArray( targetName, cancelOn ) == -1 && ! cancel ) {
 					var touches = e.touches;
 					if( touches && touches.length ) {
 						startY = touches[0].pageY;
 					}
-					e.preventDefault();
 				}
 			});
 			$(window).on( "touchmove.fsvs", function(ev) {
@@ -319,7 +330,7 @@
 		 */
 		var isScrollingUp = function(ev){
 			var e = window.event || ev;
-			var wheely = ( e.wheelDelta || -e.detail || e.originalEvent.detail );
+			var wheely = ( e.wheelDelta || e.detail || e.originalEvent.detail );
 			var delta = Math.max( -1, Math.min( 1, wheely ) );
 			if( isChrome() ) wheely = Math.floor( wheely / 5 );
 			if( e.originalEvent && e.originalEvent.detail ) {
