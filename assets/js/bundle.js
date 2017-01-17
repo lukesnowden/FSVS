@@ -462,27 +462,31 @@
 			 * @return {[type]}    [description]
 			 */
 
-			var touchMoveHandeler = function(ev){
-				var activeFSVS = anyActiveFSVS();
-				if( activeFSVS ) {
-					// unbindTouchMoveHandeler();
-					// ev.preventDefault();
-					// if( activeFSVS.fsvs.isFirstSlide() && isDraggingDown( ev ) ) {
-					// 	bindScrollHandeler();
-					// 	activeFSVS.fsvs.unjackScreen();
-					// } else if( activeFSVS.fsvs.isLastSlide() && isDraggingUp( ev ) ) {
-					// 	bindScrollHandeler();
-					// 	activeFSVS.fsvs.unjackScreen();
-					// } else
-					// if( isDraggingUp(ev) ) {
-					// 	activeFSVS.fsvs.slideUp();
-					// } else if( isDraggingDown(ev) ) {
-					// 	activeFSVS.fsvs.slideDown();
-					// }
-				} else {
-					//scrollHandeler(ev);
-				}
-			}
+            var touchMoveHandeler = function(ev){
+                var activeFSVS = anyActiveFSVS();
+                if( activeFSVS ) {
+                    var fsvsClass = activeFSVS.fsvs;
+                    fsvsClass.setOffset();
+                    ev.preventDefault();
+                    var iDU = isDraggingUp(ev);
+                    var iDD = isDraggingDown(ev);
+                    if( fsvsClass.isFirstSlide() && iDD ) {
+                        bindScrollHandeler();
+                        fsvsClass.unjackScreen();
+                        fsvsClass.hidePagination();
+                    } else if( fsvsClass.isLastSlide() && iDU ) {
+                        bindScrollHandeler();
+                        fsvsClass.unjackScreen();
+                        fsvsClass.hidePagination();
+                    } else if( iDU ) {
+                        fsvsClass.slideUp();
+                    } else if( iDD ) {
+                        fsvsClass.slideDown();
+                    }
+                } else {
+                    scrollHandeler(ev);
+                }
+            }
 
 			/**
 			 * [bindTouchStartHandeler description]
