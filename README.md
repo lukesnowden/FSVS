@@ -3,18 +3,18 @@ Send a pull request to add your projects to the showcase list
 
 * http://specialebrides.com/ - Divisum
 * https://cryptuitive.com/ - Jon Cursi
-* http://luke.sno.wden.co.uk/ - Me
+* https://www.lukesnowden.co.uk/ - Me
 
 #FSVS2 (BETA) on development branch
 
 link: https://github.com/lukesnowden/FSVS/tree/development
-demo: http://luke.sno.wden.co.uk/full-screen-vertical-scroll/v2
+demo: https://www.lukesnowden.co.uk/full-screen-vertical-scroll/v2
 
 I am currently having issues trying to hijack the screen on scroll for mobiles. If anyone cares to try and accomplish this as I've currently ran out of ideas, it would be greatly appreciated and you will be accredited for it.
 
 #FSVS - Full Screen Vertical Scroller
 
-more information http://luke.sno.wden.co.uk/full-screen-vertical-scroll
+more information https://www.lukesnowden.co.uk/full-screen-vertical-scroll
 
 ###initiate the plugin:
 
