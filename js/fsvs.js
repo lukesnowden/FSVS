@@ -284,12 +284,23 @@
 
 		var mouseWheelHandler = function( ev ) {
 			var e = window.event || ev;
-			var wheely = 0;			
-		    if (e.type == 'mousewheel') {
-		        wheely = (e.originalEvent.wheelDelta * -1);
-		    }else if (e.type == 'DOMMouseScroll') {
-		        wheely = 40 * e.originalEvent.detail;
-		    }
+			var wheely = 0;
+			if (e.type == 'mousewheel') {
+				// Fix for IE11 originalEvent being undefined
+				// IE offers wheelDelta and detail directly through the event
+				if(e.originalEvent !== undefined) {
+					wheely = (e.originalEvent.wheelDelta * -1);
+				} else {
+					wheely = (e.wheelDelta * -1);
+				}
+			}
+			else if (e.type == 'DOMMouseScroll') {
+				if(e.originalEvent !== undefined) {
+					wheely = 40 * e.originalEvent.detail;
+				} else {
+					wheely = 40 * e.detail;
+				}
+			}
 			wheely = ( e.wheelDelta || -e.detail || wheely);
 			var delta = Math.max( -1, Math.min( 1, wheely ) );
 			if( isChrome() ) {
